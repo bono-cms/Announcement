@@ -1,7 +1,6 @@
 <?php
 
-use Krystal\Form\Widget\CheckBoxWidget;
-use Krystal\Form\Widget\DropdownWidget;
+use Krystal\Form\Element;
 
 ?>
 
@@ -9,92 +8,82 @@ use Krystal\Form\Widget\DropdownWidget;
 
 <form>
 	<div class="well clearfix">
-		
-		<input type="hidden" name="announce[id]" value="<?php echo $announce->getId(); ?>" />
-		<input type="hidden" name="announce[web_page_id]" value="<?php echo $announce->getWebPageId(); ?>" />
-		<input type="hidden" name="web_page_id" value="<?php echo $announce->getWebPageId(); ?>" />
-		
+        
+        <?php echo Element::hidden('announce[id]', $announce->getId()); ?>
+        <?php echo Element::hidden('announce[web_page_id]', $announce->getWebPageId()); ?>
+        <?php echo Element::hidden('web_page_id', $announce->getWebPageId()); ?>
+        
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
 			<div class="col-lg-10">
 				<div class="input-group">
-					<input type="text" name="announce[title]" class="form-control" placeholder="<?php $this->show('Announce title'); ?>" data-input="title" value="<?php echo $announce->getTitle(); ?>" />
+                    <?php echo Element::text('announce[title]', $announce->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Announce title'))); ?>
 					<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
 				</div>
 			</div>
 		</div>
 		
-		
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
 			<div class="col-lg-10">
 				<div class="input-group date">
-					<input type="text" name="announce[name]" class="form-control" placeholder="<?php $this->show('Name of this announce'); ?>" value="<?php echo $announce->getName(); ?>" />
+                    <?php echo Element::text('announce[name]', $announce->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name of this announce'))); ?>
 					<span class="input-group-addon"><i class="glyphicon glyphicon-pencil" data-toggle="tooltip"></i></span>
 				</div>
 			</div>
 		</div>
 		
-		
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
 			<div class="col-lg-10">
-				
-				<?php echo DropdownWidget::render(array('name' => 'announce[category_id]', 'class' => 'form-control'), $categories, $announce->getCategoryId(), false); ?>
+                <?php echo Element::select('announce[category_id]', $categories, $announce->getCategoryId(), array('class' => 'form-control')); ?>
 			</div>
 		</div>
-		
 		
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Introduction'); ?></label>
-			<div class="col-lg-10">				
-				<textarea name="announce[intro]" class="form-control"><?php echo $announce->getIntro(); ?></textarea>
+			<div class="col-lg-10">
+                <?php echo Element::textarea('announce[intro]', $announce->getIntro()); ?>
 			</div>
 		</div>
-		
 		
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Full text'); ?></label>
 			<div class="col-lg-10">
-				<textarea name="announce[full]" class="form-control"><?php echo $announce->getFull(); ?></textarea>
+                <?php echo Element::textarea('announce[full]', $announce->getFull()); ?>
 			</div>
 		</div>
 		
-		
 		<div class="options">
-			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
 				<div class="col-lg-10">
-					<?php echo CheckBoxWidget::render(array('name' => 'announce[published]', 'class' => 'form-control'), $announce->getPublished()); ?>
+                    <?php echo Element::checkbox('announce[published]', $announce->getPublished(), array('class' => 'form-control')); ?>
 				</div>
 			</div>
-			
 			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
 				<div class="col-lg-10">
-					<?php echo CheckBoxWidget::render(array('name' => 'announce[seo]', 'class' => 'form-control'), $announce->getSeo()); ?>
+                    <?php echo Element::checkbox('announce[seo]', $announce->getSeo(), array('class' => 'form-control')); ?>
 				</div>
 			</div>
-			
 			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
-						<input type="number" name="announce[order]" class="form-control"  placeholder="<?php $this->show('Order of the announce to be created'); ?>" value="<?php echo $announce->getOrder(); ?>" />
+                        <?php echo Element::number('announce[order]', $announce->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Order of the announce to be created'))); ?>
 						<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
 					</div>
 				</div>
 			</div>
 			
-			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
-						<input type="text" name="announce[slug]" class="form-control" data-input="slug" placeholder="<?php $this->show('URL slug for this announce. By default is taken from a title'); ?>" value="<?php echo $announce->getSlug(); ?>" />
+                        <?php echo Element::text('announce[slug]', $announce->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this announce. By default is taken from a title'))); ?>
 						<span class="input-group-addon">
 							<a href="#" data-button="slug"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh'); ?>"></i></a>
 						</span>
@@ -102,54 +91,47 @@ use Krystal\Form\Widget\DropdownWidget;
 				</div>
 			</div>
 			
-			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
-						<input type="text" name="announce[keywords]" class="form-control"  placeholder="<?php $this->show('Keywords used for search engines'); ?>" value="<?php echo $announce->getKeywords() ;?>" />
+                        <?php echo Element::text('announce[keywords]', $announce->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
 						<span class="input-group-addon"><i class="glyphicon glyphicon-tags"></i></span>
 					</div>
 				</div>
 			</div>
 			
-			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Meta-Description'); ?></label>
 				<div class="col-lg-10">
-					<textarea name="announce[meta_description]" class="form-control" placeholder="<?php $this->show('Meta description for search engines'); ?>"><?php echo $announce->getMetaDescription(); ?></textarea>
+                    <?php echo Element::textarea('announce[meta_description]', $announce->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
 				</div>
 			</div>
-			
 		</div>
 	</div>
-	
-	
+
 	<?php if ($announce->getId()): ?>
-	
-	<button data-button="save" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+
+    <button data-button="save" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
 	<button data-button="save-create" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
-	
-	<?php else: ?>
-	
-	<button data-button="add" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+
+    <?php else: ?>
+
+    <button data-button="add" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
 	<button data-button="add-create" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Add & Create new'); ?></button>
-	
-	<?php endif; ?>
-	
+
+    <?php endif; ?>
+
 	<button data-button="options" class="btn btn-primary"><i class="glyphicon glyphicon-open"></i> <?php $this->show('More options'); ?></button>
 	<button data-button="cancel" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
-	
 </form>
 
 <?php else: ?>
 
 <div class="well">
-
 	<div class="center-block">
 		<h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('In order to add a new announce, you have to create at least on category'); ?></h2>
 	</div>
-
 </div>
 
 <?php endif; ?>

@@ -1,6 +1,6 @@
 <?php
 
-use Krystal\Form\Widget\CheckBoxWidget;
+use Krystal\Form\Element;
 
 ?>
 
@@ -63,13 +63,13 @@ use Krystal\Form\Widget\CheckBoxWidget;
 					<td class="text-center"><?php echo $announce->getName(); ?></td>
 					<td class="text-center"><?php echo $announce->getCategoryName(); ?></td>
 					<td class="col-lg-1">
-						<input type="number" min="0" class="form-control" name="order[<?php echo $announce->getId(); ?>]" value="<?php echo $announce->getOrder(); ?>" />
+                        <?php echo Element::number(sprintf('order[%s]', $announce->getId()), $announce->getOrder(), array('class' => 'form-control', 'min' => '0')); ?>
 					</td>
 					<td class="text-center">
-						<?php echo CheckBoxWidget::render(array('name' => sprintf('published[%s]', $announce->getId())), $announce->getPublished()); ?>
+                        <?php echo Element::checkbox(sprintf('published[%s]', $announce->getId()), $announce->getPublished()); ?>
 					</td>
 					<td class="text-center">
-						<?php echo CheckBoxWidget::render(array('name' => sprintf('seo[%s]', $announce->getId())), $announce->getSeo()); ?>
+                        <?php echo Element::checkbox(sprintf('seo[%s]', $announce->getId()), $announce->getSeo()); ?>
 					</td>
 					<td class="text-center">
 						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this announce'); ?>" data-button="view" href="<?php echo $announce->getUrl(); ?>" target="_blank" ><i class="glyphicon glyphicon-search"></i></a>
@@ -139,7 +139,7 @@ use Krystal\Form\Widget\CheckBoxWidget;
 	
 	<?php if (empty($categories)): ?>
 	<div class="center-block">
-	 <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
+        <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
 	</div>
 	<?php endif; ?>
 	
