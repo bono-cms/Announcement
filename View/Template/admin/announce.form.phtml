@@ -6,7 +6,8 @@ use Krystal\Form\Element;
 
 <?php if (!empty($categories)): ?>
 
-<form>
+<form data-group="announce">
+
 	<div class="well clearfix">
         
         <?php echo Element::hidden('announce[id]', $announce->getId()); ?>
@@ -112,18 +113,18 @@ use Krystal\Form\Element;
 
 	<?php if ($announce->getId()): ?>
 
-    <button data-button="save" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-	<button data-button="save-create" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
+    <button data-button="save" data-url="<?php echo $this->url('Announcement:Admin:Announce:Edit@updateAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+	<button data-button="save-create" data-back-url="<?php echo $this->url('Announcement:Admin:Announce:Add@indexAction'); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce:Edit@updateAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
 
     <?php else: ?>
 
-    <button data-button="add" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-	<button data-button="add-create" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Add & Create new'); ?></button>
+    <button data-button="add" data-back-url="<?php echo $this->url('Announcement:Admin:Announce:Edit@indexAction', null); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce:Add@addAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+	<button data-button="add-create" data-url="<?php echo $this->url('Announcement:Admin:Announce:Add@addAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Add & Create new'); ?></button>
 
     <?php endif; ?>
 
 	<button data-button="options" class="btn btn-primary"><i class="glyphicon glyphicon-open"></i> <?php $this->show('More options'); ?></button>
-	<button data-button="cancel" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+	<button data-button="cancel" data-url="<?php echo $this->url('Announcement:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
 </form>
 
 <?php else: ?>

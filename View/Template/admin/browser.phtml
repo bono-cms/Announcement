@@ -19,8 +19,8 @@ use Krystal\Form\Element;
 		 <li class="divider"></li>
 		 <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
 		 <?php if (!empty($announces)): ?>
-		 <li><a data-button="save-changes" href="#"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-		 <li><a data-button="remove-selected" href="#"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+		 <li><a data-button="save-changes" data-url="<?php echo $this->url('Announcement:Admin:Browser@saveAction'); ?>" href="#"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
+		 <li><a data-button="remove-selected" data-url="<?php echo $this->url('Announcement:Admin:Browser@deleteSelectedAction'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
 		 <?php else: ?>
 		 <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
 		 <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
