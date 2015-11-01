@@ -15,23 +15,23 @@ use Cms\Controller\Admin\AbstractController;
 
 abstract class AbstractAdminController extends AbstractController
 {
-	/**
-	 * Returns announce manager
-	 * 
-	 * @return \Announcement\Service\AnnounceManager
-	 */
-	final protected function getAnnounceManager()
-	{
-		return $this->getModuleService('announceManager');
-	}
+    /**
+     * Returns announce manager
+     * 
+     * @return \Announcement\Service\AnnounceManager
+     */
+    final protected function getAnnounceManager()
+    {
+        return $this->getModuleService('announceManager');
+    }
 
-	/**
-	 * Returns category manager
-	 * 
-	 * @return \Announcement\Service\CategoryManager
-	 */
-	final protected function getCategoryManager()
-	{
-		return $this->getModuleService('categoryManager');
-	}
+    /**
+     * Returns category manager
+     * 
+     * @return \Announcement\Service\CategoryManager
+     */
+    final protected function getCategoryManager()
+    {
+        return $this->getModuleService('categoryManager');
+    }
 }

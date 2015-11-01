@@ -13,11 +13,11 @@ namespace Announcement\Service;
 
 interface SiteServiceInterface
 {
-	/**
-	 * Gets all announce entities associated with provided category class
-	 * 
-	 * @param string $class Category class
-	 * @return array
-	 */
-	public function getAllByClass($class);
+    /**
+     * Gets all announce entities associated with provided category class
+     * 
+     * @param string $class Category class
+     * @return array
+     */
+    public function getAllByClass($class);
 }

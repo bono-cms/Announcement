@@ -13,56 +13,56 @@ namespace Announcement\Service;
 
 interface CategoryManagerInterface
 {
-	/**
-	 * Fetches as a list
-	 * 
-	 * @return array
-	 */
-	public function fetchList();
+    /**
+     * Fetches as a list
+     * 
+     * @return array
+     */
+    public function fetchList();
 
-	/**
-	 * Fetches category data by its associated id
-	 * 
-	 * @param string $id Category id
-	 * @return boolean|\Krystal\Stdlib\VirtualEntity
-	 */
-	public function fetchById($id);
+    /**
+     * Fetches category data by its associated id
+     * 
+     * @param string $id Category id
+     * @return boolean|\Krystal\Stdlib\VirtualEntity
+     */
+    public function fetchById($id);
 
-	/**
-	 * Returns last category id
-	 * 
-	 * @return integer
-	 */
-	public function getLastId();
+    /**
+     * Returns last category id
+     * 
+     * @return integer
+     */
+    public function getLastId();
 
-	/**
-	 * Fetches all category bags
-	 * 
-	 * @return array
-	 */
-	public function fetchAll();
+    /**
+     * Fetches all category bags
+     * 
+     * @return array
+     */
+    public function fetchAll();
 
-	/**
-	 * Deletes a category by its associated id
-	 * 
-	 * @param string $id Category id
-	 * @return boolean
-	 */
-	public function deleteById($id);
+    /**
+     * Deletes a category by its associated id
+     * 
+     * @param string $id Category id
+     * @return boolean
+     */
+    public function deleteById($id);
 
-	/**
-	 * Updates a category
-	 * 
-	 * @param array $input Raw form data
-	 * @return boolean Depending on success
-	 */
-	public function update(array $input);
+    /**
+     * Updates a category
+     * 
+     * @param array $input Raw form data
+     * @return boolean Depending on success
+     */
+    public function update(array $input);
 
-	/**
-	 * Adds a category
-	 * 
-	 * @param array $input Raw form data
-	 * @return boolean
-	 */
-	public function add(array $input);
+    /**
+     * Adds a category
+     * 
+     * @param array $input Raw form data
+     * @return boolean
+     */
+    public function add(array $input);
 }

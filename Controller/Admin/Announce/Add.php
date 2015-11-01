@@ -15,46 +15,46 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class Add extends AbstractAnnounce
 {
-	/**
-	 * Shows adding form
-	 * 
-	 * @return string
-	 */
-	public function indexAction()
-	{
-		$this->loadSharedPlugins();
+    /**
+     * Shows adding form
+     * 
+     * @return string
+     */
+    public function indexAction()
+    {
+        $this->loadSharedPlugins();
 
-		$announce = new VirtualEntity();
-		$announce->setSeo(true);
-		$announce->setPublished(true);
+        $announce = new VirtualEntity();
+        $announce->setSeo(true);
+        $announce->setPublished(true);
 
-		return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-			'title' => 'Add new announce',
-			'announce' => $announce
-		)));
-	}
+        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+            'title' => 'Add new announce',
+            'announce' => $announce
+        )));
+    }
 
-	/**
-	 * Adds an announce
-	 * 
-	 * @return string
-	 */
-	public function addAction()
-	{
-		$formValidator = $this->getValidator($this->request->getPost('announce'));
+    /**
+     * Adds an announce
+     * 
+     * @return string
+     */
+    public function addAction()
+    {
+        $formValidator = $this->getValidator($this->request->getPost('announce'));
 
-		if ($formValidator->isValid()) {
+        if ($formValidator->isValid()) {
 
-			$announceManager = $this->getAnnounceManager();
+            $announceManager = $this->getAnnounceManager();
 
-			if ($announceManager->add($this->request->getPost('announce'))) {
+            if ($announceManager->add($this->request->getPost('announce'))) {
 
-				$this->flashBag->set('success', 'An announce has been created successfully');
-				return $announceManager->getLastId();
-			}
+                $this->flashBag->set('success', 'An announce has been created successfully');
+                return $announceManager->getLastId();
+            }
 
-		} else {
-			return $formValidator->getErrors();
-		}
-	}
+        } else {
+            return $formValidator->getErrors();
+        }
+    }
 }

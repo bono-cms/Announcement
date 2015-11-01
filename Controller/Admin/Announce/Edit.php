@@ -13,50 +13,50 @@ namespace Announcement\Controller\Admin\Announce;
 
 final class Edit extends AbstractAnnounce
 {
-	/**
-	 * Shows edit form
-	 * 
-	 * @param string $id
-	 * @return string
-	 */
-	public function indexAction($id)
-	{
-		$announce = $this->getAnnounceManager()->fetchById($id);
+    /**
+     * Shows edit form
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function indexAction($id)
+    {
+        $announce = $this->getAnnounceManager()->fetchById($id);
 
-		if ($announce !== false) {
-			$this->loadSharedPlugins();
+        if ($announce !== false) {
+            $this->loadSharedPlugins();
 
-			return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-				'title' => 'Edit the announce',
-				'announce'	 => $announce
-			)));
+            return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+                'title' => 'Edit the announce',
+                'announce'   => $announce
+            )));
 
-		} else {
-			return false;
-		}
-	}
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * Updates a category
-	 * 
-	 * @return string
-	 */
-	public function updateAction()
-	{
-		$formValidator = $this->getValidator($this->request->getPost('announce'));
+    /**
+     * Updates a category
+     * 
+     * @return string
+     */
+    public function updateAction()
+    {
+        $formValidator = $this->getValidator($this->request->getPost('announce'));
 
-		if ($formValidator->isValid()) {
-			$announceManager = $this->getAnnounceManager();;
+        if ($formValidator->isValid()) {
+            $announceManager = $this->getAnnounceManager();;
 
-			if ($announceManager->update($this->request->getPost('announce'))) {
+            if ($announceManager->update($this->request->getPost('announce'))) {
 
-				$this->flashBag->set('success', 'The announce has been updated successfully');
-				return '1';
-			}
+                $this->flashBag->set('success', 'The announce has been updated successfully');
+                return '1';
+            }
 
-		} else {
+        } else {
 
-			return $formValidator->getErrors();
-		}
-	}
+            return $formValidator->getErrors();
+        }
+    }
 }

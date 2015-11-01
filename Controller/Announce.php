@@ -15,30 +15,30 @@ use Site\Controller\AbstractController;
 
 final class Announce extends AbstractController
 {
-	/**
-	 * Renders an announce by its associated id
-	 * 
-	 * @param string $id Announce id
-	 * @return string
-	 */
-	public function indexAction($id)
-	{
-		$announceManager = $this->getModuleService('announceManager');
-		$announce = $announceManager->fetchById($id);
+    /**
+     * Renders an announce by its associated id
+     * 
+     * @param string $id Announce id
+     * @return string
+     */
+    public function indexAction($id)
+    {
+        $announceManager = $this->getModuleService('announceManager');
+        $announce = $announceManager->fetchById($id);
 
-		if ($announce !== false) {
+        if ($announce !== false) {
 
-			// Load view plugins
-			$this->loadSitePlugins();
-			$this->view->getBreadcrumbBag()->add($announceManager->getBreadcrumbs($announce));
+            // Load view plugins
+            $this->loadSitePlugins();
+            $this->view->getBreadcrumbBag()->add($announceManager->getBreadcrumbs($announce));
 
-			return $this->view->render('announce', array(
-				'page' => $announce,
-				'announce' => $announce
-			));
+            return $this->view->render('announce', array(
+                'page' => $announce,
+                'announce' => $announce
+            ));
 
-		} else {
-			return false;
-		}
-	}
+        } else {
+            return false;
+        }
+    }
 }
