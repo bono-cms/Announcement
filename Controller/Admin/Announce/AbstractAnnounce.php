@@ -38,29 +38,15 @@ abstract class AbstractAnnounce extends AbstractAdminController
     }
 
     /**
-     * Returns shared variables
+     * Loads breadcrumbs
      * 
-     * @param array $overrides
-     * @return array
+     * @param string $title
+     * @return void
      */
-    final protected function getWithSharedVars(array $overrides)
+    final protected function loadBreadcrumbs($title)
     {
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'link' => 'Announcement:Admin:Browser@indexAction',
-                'name' => 'Announcement'
-            ),
-            array(
-                'link' => '#',
-                'name' => $overrides['title']
-            )
-        ));
-
-        $vars = array(
-            'categories' => $this->getModuleService('categoryManager')->fetchList()
-        );
-
-        return array_replace_recursive($vars, $overrides);
+        $this->view->getBreadcrumbBag()->addOne('Announcement', 'Announcement:Admin:Browser@indexAction')
+                                       ->addOne($title);
     }
 
     /**
@@ -81,6 +67,6 @@ abstract class AbstractAnnounce extends AbstractAdminController
     final protected function loadSharedPlugins()
     {
         $this->view->getPluginBag()->load($this->getWysiwygPluginName())
-                                   ->appendScript($this->getWithAssetPath('/admin/announce.form.js'));
+                                   ->appendScript('@Announcement/admin/announce.form.js');
     }
 }

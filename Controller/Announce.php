@@ -18,19 +18,17 @@ final class Announce extends AbstractController
     /**
      * Renders an announce by its associated id
      * 
-     * @param string $id Announce id
+     * @param string $id
      * @return string
      */
     public function indexAction($id)
     {
-        $announceManager = $this->getModuleService('announceManager');
-        $announce = $announceManager->fetchById($id);
+        $announce = $this->getModuleService('announceManager')->fetchById($id);
 
         if ($announce !== false) {
-
             // Load view plugins
             $this->loadSitePlugins();
-            $this->view->getBreadcrumbBag()->add($announceManager->getBreadcrumbs($announce));
+            $this->view->getBreadcrumbBag()->addOne($announce->getTitle());
 
             return $this->view->render('announce', array(
                 'page' => $announce,

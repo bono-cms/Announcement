@@ -28,10 +28,13 @@ final class Add extends AbstractAnnounce
         $announce->setSeo(true);
         $announce->setPublished(true);
 
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+        $this->loadBreadcrumbs('Add new announce');
+
+        return $this->view->render($this->getTemplatePath(), array(
             'title' => 'Add new announce',
-            'announce' => $announce
-        )));
+            'announce' => $announce,
+            'categories' => $this->getModuleService('categoryManager')->fetchList()
+        ));
     }
 
     /**
@@ -44,11 +47,9 @@ final class Add extends AbstractAnnounce
         $formValidator = $this->getValidator($this->request->getPost('announce'));
 
         if ($formValidator->isValid()) {
-
             $announceManager = $this->getAnnounceManager();
 
             if ($announceManager->add($this->request->getPost('announce'))) {
-
                 $this->flashBag->set('success', 'An announce has been created successfully');
                 return $announceManager->getLastId();
             }

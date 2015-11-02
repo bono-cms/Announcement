@@ -107,7 +107,6 @@ final class Browser extends AbstractAdminController
     public function deleteAction()
     {
         if ($this->request->hasPost('id')) {
-
             $id = $this->request->getPost('id');
 
             // Grab a service
@@ -115,7 +114,6 @@ final class Browser extends AbstractAdminController
             $announceManager->deleteById($id);
 
             $this->flashBag->set('success', 'The announces have been removed successfully');
-
             return '1';
         }
     }
@@ -128,14 +126,12 @@ final class Browser extends AbstractAdminController
     public function deleteCategoryAction()
     {
         if ($this->request->hasPost('id')) {
-
             $id = $this->request->getPost('id');
 
             $categoryManager = $this->getCategoryManager();
             $categoryManager->deleteById($id);
 
             $this->flashBag->set('success', 'Selected category has been removed successfully');
-
             return '1';
         }
     }
@@ -158,13 +154,7 @@ final class Browser extends AbstractAdminController
      */
     private function getWithSharedVars(array $overrides)
     {
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'link' => '#',
-                'name' => 'Announcement'
-            )
-        ));
-
+        $this->view->getBreadcrumbBag()->addOne('Announcement');
         $vars = array(
             'categories' => $this->getCategoryManager()->fetchAll(),
             'title' => 'Announcements',
@@ -181,6 +171,6 @@ final class Browser extends AbstractAdminController
     private function loadSharedPlugins()
     {
         $this->view->getPluginBag()
-                   ->appendScript($this->getWithAssetPath('/admin/browser.js'));
+                   ->appendScript('@Announcement/admin/browser.js');
     }
 }

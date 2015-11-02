@@ -23,11 +23,12 @@ final class Add extends AbstractCategory
     public function indexAction()
     {
         $this->loadSharedPlugins();
+        $this->loadBreadcrumbs('Add a category');
 
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+        return $this->view->render($this->getTemplatePath(), array(
             'title' => 'Add a category',
             'category' => new VirtualEntity()
-        )));
+        ));
     }
 
     /**

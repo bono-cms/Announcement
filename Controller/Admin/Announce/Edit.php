@@ -25,11 +25,13 @@ final class Edit extends AbstractAnnounce
 
         if ($announce !== false) {
             $this->loadSharedPlugins();
+            $this->loadBreadcrumbs('Edit the announce');
 
-            return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+            return $this->view->render($this->getTemplatePath(), array(
                 'title' => 'Edit the announce',
-                'announce'   => $announce
-            )));
+                'announce'   => $announce,
+                'categories' => $this->getModuleService('categoryManager')->fetchList()
+            ));
 
         } else {
             return false;
@@ -49,13 +51,11 @@ final class Edit extends AbstractAnnounce
             $announceManager = $this->getAnnounceManager();;
 
             if ($announceManager->update($this->request->getPost('announce'))) {
-
                 $this->flashBag->set('success', 'The announce has been updated successfully');
                 return '1';
             }
 
         } else {
-
             return $formValidator->getErrors();
         }
     }
