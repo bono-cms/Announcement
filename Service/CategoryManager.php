@@ -137,7 +137,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         if ($this->categoryMapper->deleteById($id) && $this->announceMapper->deleteAllByCategoryId($id)) {
             $this->track('Category "%s" has been removed', $name);
             return true;
-
         } else {
             return false;
         }
@@ -154,7 +153,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         if ($this->categoryMapper->update($input['id'], $input['name'], $input['class'])) {
             $this->track('Category "%s" has been updated', $input['name']);
             return true;
-
         } else {
             return false;
         }
