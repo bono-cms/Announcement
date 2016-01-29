@@ -2,10 +2,10 @@ $(function(){
 	$.delete({
 		categories : {
 			announce : {
-				url : "/admin/module/announcement/announce/delete.ajax"
+				url : "/admin/module/announcement/announce/delete"
 			},
 			category : {
-				url : "/admin/module/announcement/category/delete.ajax"
+				url : "/admin/module/announcement/category/delete"
 			}
 		}
 	});

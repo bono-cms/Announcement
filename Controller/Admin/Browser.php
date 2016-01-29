@@ -11,8 +11,34 @@
 
 namespace Announcement\Controller\Admin;
 
-final class Browser extends AbstractAdminController
+use Cms\Controller\Admin\AbstractController;
+
+final class Browser extends AbstractController
 {
+    /**
+     * Creates a grid
+     * 
+     * @param array $vars
+     * @return string
+     */
+    private function createGrid(array $vars)
+    {
+        // Append a breadcrumb
+        $this->view->getBreadcrumbBag()->addOne('Announcement');
+
+        // Load view plugins
+        $this->view->getPluginBag()
+                   ->appendScript('@Announcement/admin/browser.js');
+
+        $defaults = array(
+            'categories' => $this->getModuleService('categoryManager')->fetchAll(),
+            'title' => 'Announcements',
+        );
+
+        $vars = array_replace_recursive($defaults, $vars);
+        return $this->view->render('browser', $vars);
+    }
+
     /**
      * Shows a table
      * 
@@ -21,36 +47,32 @@ final class Browser extends AbstractAdminController
      */
     public function indexAction($page = 1)
     {
-        $this->loadSharedPlugins();
-
-        $paginator = $this->getAnnounceManager()->getPaginator();
+        $paginator = $this->getModuleService('announceManager')->getPaginator();
         $paginator->setUrl('/admin/module/announcement/page/(:var)');
 
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-            'announces' => $this->getAnnounceManager()->fetchAllByPage($page, $this->getSharedPerPageCount()),
+        return $this->createGrid(array(
+            'announces' => $this->getModuleService('announceManager')->fetchAllByPage($page, $this->getSharedPerPageCount()),
             'paginator' => $paginator,
-        )));
+        ));
     }
 
     /**
      * Filters by category id
      * 
-     * @param string $categoryId Category id
+     * @param string $id Category id
      * @param integer $page Current page
      * @return string
      */
-    public function categoryAction($categoryId, $page = 1)
+    public function categoryAction($id, $page = 1)
     {
-        $this->loadSharedPlugins();
+        $paginator = $this->getModuleService('announceManager')->getPaginator();
+        $paginator->setUrl('/admin/module/announcement/category/view/'.$id.'/page/(:var)');
 
-        $paginator = $this->getAnnounceManager()->getPaginator();
-        $paginator->setUrl('/admin/module/announcement/category/view/'.$categoryId.'/page/(:var)');
-
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-            'categoryId' => $categoryId,
-            'announces' => $this->getAnnounceManager()->fetchAllByCategoryIdAndPage($categoryId, $page, $this->getSharedPerPageCount()),
+        return $this->createGrid(array(
+            'categoryId' => $id,
+            'announces' => $this->getModuleService('announceManager')->fetchAllByCategoryIdAndPage($id, $page, $this->getSharedPerPageCount()),
             'paginator' => $paginator,
-        )));
+        ));
     }
 
     /**
@@ -58,119 +80,22 @@ final class Browser extends AbstractAdminController
      * 
      * @return string
      */
-    public function saveAction()
+    public function tweakAction()
     {
         if ($this->request->hasPost('seo', 'published', 'order')) {
-
             $published = $this->request->getPost('published');
             $seo = $this->request->getPost('seo');
             $orders = $this->request->getPost('order');
 
             // Grab a service
-            $announceManager = $this->getAnnounceManager();
+            $announceManager = $this->getModuleService('announceManager');
 
             $announceManager->updatePublished($published);
             $announceManager->updateSeo($seo);
             $announceManager->updateOrders($orders);
 
             $this->flashBag->set('success', 'Announce settings have been updated successfully');
-
             return '1';
         }
-    }
-
-    /**
-     * Delete selected announces
-     * 
-     * @return string
-     */
-    public function deleteSelectedAction()
-    {
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
-
-            $this->getAnnounceManager()->deleteByIds($ids);
-            $this->flashBag->set('success', 'Selected announces have been removed successfully');
-
-        } else {
-            $this->flashBag->set('warning', 'You should select at least one announce to remove');
-        }
-
-        return '1';
-    }
-
-    /**
-     * Deletes an announce by its id
-     * 
-     * @return string
-     */
-    public function deleteAction()
-    {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            // Grab a service
-            $announceManager = $this->getAnnounceManager();
-            $announceManager->deleteById($id);
-
-            $this->flashBag->set('success', 'The announces have been removed successfully');
-            return '1';
-        }
-    }
-
-    /**
-     * Deletes a category by its associated id
-     * 
-     * @return string
-     */
-    public function deleteCategoryAction()
-    {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            $categoryManager = $this->getCategoryManager();
-            $categoryManager->deleteById($id);
-
-            $this->flashBag->set('success', 'Selected category has been removed successfully');
-            return '1';
-        }
-    }
-
-    /**
-     * Returns template path
-     * 
-     * @return string
-     */
-    private function getTemplatePath()
-    {
-        return 'browser';
-    }
-
-    /**
-     * Returns shared variables
-     * 
-     * @param array $overrides
-     * @return array
-     */
-    private function getWithSharedVars(array $overrides)
-    {
-        $this->view->getBreadcrumbBag()->addOne('Announcement');
-        $vars = array(
-            'categories' => $this->getCategoryManager()->fetchAll(),
-            'title' => 'Announcements',
-        );
-
-        return array_replace_recursive($vars, $overrides);
-    }
-
-    /**
-     * Loads shared plugins
-     * 
-     * @return void
-     */
-    private function loadSharedPlugins()
-    {
-        $this->view->getPluginBag()
-                   ->appendScript('@Announcement/admin/browser.js');
     }
 }

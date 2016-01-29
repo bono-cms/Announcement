@@ -113,13 +113,13 @@ use Krystal\Form\Element;
 
 	<?php if ($announce->getId()): ?>
 
-    <button data-button="save" data-url="<?php echo $this->url('Announcement:Admin:Announce:Edit@updateAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-	<button data-button="save-create" data-back-url="<?php echo $this->url('Announcement:Admin:Announce:Add@indexAction'); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce:Edit@updateAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
+    <button data-button="save" data-url="<?php echo $this->url('Announcement:Admin:Announce@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+	<button data-button="save-create" data-back-url="<?php echo $this->url('Announcement:Admin:Announce@addAction'); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
 
     <?php else: ?>
 
-    <button data-button="add" data-back-url="<?php echo $this->url('Announcement:Admin:Announce:Edit@indexAction', null); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce:Add@addAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-	<button data-button="add-create" data-url="<?php echo $this->url('Announcement:Admin:Announce:Add@addAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Add & Create new'); ?></button>
+    <button data-button="add" data-back-url="<?php echo $this->url('Announcement:Admin:Announce@editAction', null); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+	<button data-button="add-create" data-url="<?php echo $this->url('Announcement:Admin:Announce@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Add & Create new'); ?></button>
 
     <?php endif; ?>
 
