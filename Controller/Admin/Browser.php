@@ -32,7 +32,6 @@ final class Browser extends AbstractController
 
         $defaults = array(
             'categories' => $this->getModuleService('categoryManager')->fetchAll(),
-            'title' => 'Announcements',
         );
 
         $vars = array_replace_recursive($defaults, $vars);

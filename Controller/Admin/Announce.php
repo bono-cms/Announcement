@@ -35,7 +35,6 @@ final class Announce extends AbstractController
                                        ->addOne($title);
 
         return $this->view->render('announce.form', array(
-            'title' => $title,
             'announce' => $announce,
             'categories' => $this->getModuleService('categoryManager')->fetchList()
         ));
