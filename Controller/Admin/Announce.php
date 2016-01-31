@@ -90,7 +90,7 @@ final class Announce extends AbstractController
     {
         $input = $this->request->getPost('announce');
 
-        return $this->invokeSave('announceManager', $input, array(
+        return $this->invokeSave('announceManager', $input['id'], $input, array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(

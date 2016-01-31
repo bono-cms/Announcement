@@ -81,7 +81,7 @@ final class Category extends AbstractController
     {
         $input = $this->request->getPost('category');
 
-        return $this->invokeSave('categoryManager', $input, array(
+        return $this->invokeSave('categoryManager', $input['id'], $input, array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
