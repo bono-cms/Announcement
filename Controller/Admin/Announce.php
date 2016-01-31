@@ -78,27 +78,7 @@ final class Announce extends AbstractController
      */
     public function deleteAction()
     {
-        $announceManager = $this->getModuleService('announceManager');        
-
-        // Batch removal
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
-
-            $announceManager->deleteByIds($ids);
-            $this->flashBag->set('success', 'Selected announces have been removed successfully');
-        } else {
-            $this->flashBag->set('warning', 'You should select at least one announce to remove');
-        }
-
-        // Single removal
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            $announceManager->deleteById($id);
-            $this->flashBag->set('success', 'The announces have been removed successfully');
-        }
-
-        return '1';
+        return $this->invokeRemoval('announceManager');
     }
 
     /**
@@ -110,7 +90,7 @@ final class Announce extends AbstractController
     {
         $input = $this->request->getPost('announce');
 
-        $formValidator = $this->validatorFactory->build(array(
+        return $this->invokeSave('announceManager', $input, array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
@@ -121,25 +101,5 @@ final class Announce extends AbstractController
                 )
             )
         ));
-
-        if ($formValidator->isValid()) {
-            $announceManager = $this->getModuleService('announceManager');
-
-            if ($input['id']) {
-                if ($announceManager->update($this->request->getPost('announce'))) {
-                    $this->flashBag->set('success', 'The announce has been updated successfully');
-                    return '1';
-                }
-
-            } else {
-                if ($announceManager->add($this->request->getPost('announce'))) {
-                    $this->flashBag->set('success', 'An announce has been created successfully');
-                    return $announceManager->getLastId();
-                }
-            }
-
-        } else {
-            return $formValidator->getErrors();
-        }
     }
 }
