@@ -6,6 +6,7 @@ CHANGELOG
 
  * Improved internal structure
  * Forced to display categories in DESC order
+ * Changed module icon
 
 1.1
 ---
