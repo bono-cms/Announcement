@@ -27,8 +27,8 @@ final class Announce extends AbstractController
     private function createForm(VirtualEntity $announce, $title)
     {
         // Load view plugins
-        $this->view->getPluginBag()->load($this->getWysiwygPluginName())
-                                   ->appendScript('@Announcement/admin/announce.form.js');
+        $this->view->getPluginBag()
+                   ->load($this->getWysiwygPluginName());
 
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Announcement', 'Announcement:Admin:Browser@indexAction')
