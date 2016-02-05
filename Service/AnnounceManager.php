@@ -85,22 +85,6 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     }
 
     /**
-     * Returns breadcrumb collection
-     * 
-     * @param \Krystal\Stdlib\VirtualEntity $announce
-     * @return array
-     */
-    public function getBreadcrumbs(VirtualEntity $announce)
-    {
-        return array(
-            array(
-                'name' => $announce->getTitle(),
-                'link' => '#'
-            )
-        );
-    }
-
-    /**
      * Fetches a title by web page id
      * 
      * @param string $webPageId
@@ -370,7 +354,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     {
         $webPageId = $this->announceMapper->fetchWebPageIdById($id);
         $this->webPageManager->deleteById($webPageId);
-        
+
         return $this->announceMapper->deleteById($id);
     }
 }

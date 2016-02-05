@@ -16,14 +16,6 @@ use Krystal\Stdlib\VirtualEntity;
 interface AnnounceManagerInterface
 {
     /**
-     * Returns breadcrumb collection
-     * 
-     * @param \Krystal\Stdlib\VirtualEntity $announce
-     * @return array
-     */
-    public function getBreadcrumbs(VirtualEntity $announce);
-
-    /**
      * Updates orders by their associated ids
      * 
      * @param array $pair
