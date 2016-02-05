@@ -28,7 +28,8 @@ final class Announce extends AbstractController
         if ($announce !== false) {
             // Load view plugins
             $this->loadSitePlugins();
-            $this->view->getBreadcrumbBag()->addOne($announce->getTitle());
+            $this->view->getBreadcrumbBag()
+                       ->addOne($announce->getTitle());
 
             return $this->view->render('announce', array(
                 'page' => $announce,
