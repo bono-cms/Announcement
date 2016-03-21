@@ -22,7 +22,7 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public static function getTableName()
     {
-        return 'bono_module_announcement_announces';
+        return self::getWithPrefix('bono_module_announcement_announces');
     }
 
     /**

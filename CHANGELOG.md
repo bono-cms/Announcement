@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added support for table prefix
  * Improved internal structure
  * Forced to display categories in DESC order
  * Changed module icon
