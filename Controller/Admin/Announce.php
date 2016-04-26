@@ -48,8 +48,8 @@ final class Announce extends AbstractController
     public function addAction()
     {
         $announce = new VirtualEntity();
-        $announce->setSeo(true);
-        $announce->setPublished(true);
+        $announce->setSeo(true)
+                 ->setPublished(true);
 
         return $this->createForm($announce, 'Add new announce');
     }
