@@ -74,11 +74,12 @@ final class Announce extends AbstractController
     /**
      * Delete selected announces
      * 
+     * @param string $id
      * @return string
      */
-    public function deleteAction()
+    public function deleteAction($id)
     {
-        return $this->invokeRemoval('announceManager');
+        return $this->invokeRemoval('announceManager', $id);
     }
 
     /**

@@ -32,7 +32,7 @@ return array(
         'disallow' => array('guest')
     ),
     
-    '/admin/module/announcement/category/delete' => array(
+    '/admin/module/announcement/category/delete/(:var)' => array(
         'controller' => 'Admin:Category@deleteAction',
         'disallow' => array('guest')
     ),
@@ -54,7 +54,7 @@ return array(
         'disallow' => array('guest')
     ),
     
-    '/admin/module/announcement/announce/delete' => array(
+    '/admin/module/announcement/announce/delete/(:var)' => array(
         'controller' => 'Admin:Announce@deleteAction',
         'disallow' => array('guest')
     ),

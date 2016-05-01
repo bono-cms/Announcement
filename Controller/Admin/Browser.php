@@ -26,10 +26,6 @@ final class Browser extends AbstractController
         // Append a breadcrumb
         $this->view->getBreadcrumbBag()->addOne('Announcement');
 
-        // Load view plugins
-        $this->view->getPluginBag()
-                   ->appendScript('@Announcement/admin/browser.js');
-
         $defaults = array(
             'categories' => $this->getModuleService('categoryManager')->fetchAll(),
         );

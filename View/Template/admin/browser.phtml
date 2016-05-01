@@ -20,7 +20,7 @@ use Krystal\Form\Element;
 		 <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
 		 <?php if (!empty($announces)): ?>
 		 <li><a data-button="save-changes" data-url="<?php echo $this->url('Announcement:Admin:Browser@saveAction'); ?>" href="#"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-		 <li><a data-button="remove-selected" data-url="<?php echo $this->url('Announcement:Admin:Announce@deleteAction'); ?>" href="#"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+		 <li><a data-button="remove-selected" data-url="<?php echo $this->url('Announcement:Admin:Announce@deleteAction', null); ?>" href="#"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
 		 <?php else: ?>
 		 <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
 		 <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
@@ -74,7 +74,7 @@ use Krystal\Form\Element;
 					<td class="text-center">
 						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this announce'); ?>" data-button="view" href="<?php echo $announce->getUrl(); ?>" target="_blank" ><i class="glyphicon glyphicon-search"></i></a>
 						<a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this announce'); ?>" href="<?php echo $this->url('Announcement:Admin:Announce@editAction', $announce->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-						<a data-button="delete" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this announce'); ?>" data-id="<?php echo $announce->getId(); ?>" data-category="announce" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+						<a data-button="delete" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this announce'); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce@deleteAction', $announce->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
 					</td>
 				</tr>
 				
@@ -128,7 +128,7 @@ use Krystal\Form\Element;
 				<td class="text-center"><?php echo $category->getClass(); ?></td>
 				<td class="text-center">
 					<a data-toggle="tooltip" data-placement="left" data-button="edit" data-original-title="<?php $this->show('Edit this category'); ?>" href="<?php echo $this->url('Announcement:Admin:Category@editAction', $category->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-					<a data-toggle="tooltip" data-placement="left" data-button="delete" data-original-title="<?php $this->show('Remove this category'); ?>" data-id="<?php echo $category->getId(); ?>" data-category="category" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+					<a data-toggle="tooltip" data-placement="left" data-button="delete" data-original-title="<?php $this->show('Remove this category'); ?>" data-url="<?php echo $this->url('Announcement:Admin:Category@deleteAction', $category->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
 				</td>
 				<?php endif; ?>
 			</tr>
