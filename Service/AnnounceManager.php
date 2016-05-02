@@ -339,7 +339,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
                 return false;
             }
         }
-        
+
         $this->track('Batch removal of %s announces', count($ids));
         return true;
     }
