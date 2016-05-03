@@ -142,7 +142,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
                 return false;
             }
         }
-        
+
         return true;
     }
 
