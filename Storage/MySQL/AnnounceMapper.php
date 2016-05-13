@@ -179,7 +179,7 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public function fetchAllPublishedByCategoryId($id)
     {
-        return $this->getSelectQuery(false, $id)
+        return $this->getSelectQuery(true, $id)
                     ->queryAll();
     }
 
