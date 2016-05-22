@@ -95,7 +95,7 @@ final class Announce extends AbstractController
             'input' => array(
                 'source' => $input,
                 'definition' => array(
-                    'title' => new Pattern\Title(),
+                    'title' => new Pattern\Title(array('required' => false)),
                     'name' => new Pattern\Name(),
                     'intro' => new Pattern\IntroText(),
                     'full' => new Pattern\FullText()

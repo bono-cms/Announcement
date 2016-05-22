@@ -203,7 +203,12 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     {
         // Empty slug is always taken from a title
         if (empty($input['slug'])) {
-            $input['slug'] = $input['title'];
+            $input['slug'] = $input['name'];
+        }
+
+        // Empty title is taken from name
+        if (empty($input['title'])) {
+            $input['title'] = $input['name'];
         }
 
         $input['slug'] = $this->webPageManager->sluggify($input['slug']);

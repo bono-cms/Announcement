@@ -15,16 +15,6 @@ use Krystal\Form\Element;
         <?php echo Element::hidden('web_page_id', $announce->getWebPageId()); ?>
         
 		<div class="form-group clearfix">
-			<label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
-			<div class="col-lg-10">
-				<div class="input-group">
-                    <?php echo Element::text('announce[title]', $announce->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Announce title'))); ?>
-					<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-				</div>
-			</div>
-		</div>
-		
-		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
 			<div class="col-lg-10">
 				<div class="input-group date">
@@ -91,6 +81,16 @@ use Krystal\Form\Element;
 					</div>
 				</div>
 			</div>
+            
+            <div class="form-group clearfix">
+                <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
+                <div class="col-lg-10">
+                    <div class="input-group">
+                        <?php echo Element::text('announce[title]', $announce->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Announce title'))); ?>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                    </div>
+                </div>
+            </div>
 			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
