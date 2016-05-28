@@ -85,14 +85,11 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     }
 
     /**
-     * Fetches a title by web page id
-     * 
-     * @param string $webPageId
-     * @return string
+     * {@inheritDoc}
      */
-    public function fetchTitleByWebPageId($webPageId)
+    public function fetchNameByWebPageId($webPageId)
     {
-        return $this->announceMapper->fetchTitleByWebPageId($webPageId);
+        return $this->announceMapper->fetchNameByWebPageId($webPageId);
     }
 
     /**
