@@ -179,6 +179,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
             ->setIntro(Filter::escapeContent($announce['intro']))
             ->setFull(Filter::escapeContent($announce['full']))
             ->setOrder((int) $announce['order'])
+            ->setIcon(Filter::escape($announce['icon']))
             ->setPublished((bool) $announce['published'])
             ->setSeo((bool) $announce['seo'])
             ->setSlug($this->webPageManager->fetchSlugByWebPageId($announce['web_page_id']))

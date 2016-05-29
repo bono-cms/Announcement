@@ -59,6 +59,16 @@ use Krystal\Form\Element;
                     <?php echo Element::checkbox('announce[seo]', $announce->getSeo(), array('class' => 'form-control')); ?>
 				</div>
 			</div>
+
+			<div class="form-group clearfix">
+				<label class="col-lg-2 control-label"><?php $this->show('Icon'); ?></label>
+				<div class="col-lg-10">
+					<div class="input-group">
+                        <?php echo Element::text('announce[icon]', $announce->getIcon(), array('class' => 'form-control', 'placeholder' => $this->translate('Path to the icon for this announce'))); ?>
+						<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+					</div>
+				</div>
+			</div>
 			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>

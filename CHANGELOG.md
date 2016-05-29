@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added optional `icon` attribute
  * Fixed issue with non-ability to fetch ids in multilingual site
  * Added support for table prefix
  * Improved internal structure

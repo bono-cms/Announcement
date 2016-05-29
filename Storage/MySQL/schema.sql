@@ -11,6 +11,7 @@ CREATE TABLE `bono_module_announcement_announces` (
 	`intro` TEXT NOT NULL,
 	`full` TEXT NOT NULL,
 	`order` INT NOT NULL,
+    `icon` varchar(255) NOT NULL,
 	`published` varchar(1) NOT NULL,
 	`seo` varchar(1) NOT NULL,
 	`keywords` TEXT NOT NULL,
