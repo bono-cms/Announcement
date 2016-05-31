@@ -8,14 +8,13 @@ use Krystal\Form\Element;
 <?php if (!empty($categories)): ?>
 
 <form data-group="announce">
+	<div class="well">
 
-	<div class="well clearfix">
-        
         <?php echo Element::hidden('announce[id]', $announce->getId()); ?>
         <?php echo Element::hidden('announce[web_page_id]', $announce->getWebPageId()); ?>
         <?php echo Element::hidden('web_page_id', $announce->getWebPageId()); ?>
         
-		<div class="form-group clearfix">
+		<div class="form-group">
 			<label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
 			<div class="col-lg-10">
 				<div class="input-group date">
@@ -25,21 +24,21 @@ use Krystal\Form\Element;
 			</div>
 		</div>
 		
-		<div class="form-group clearfix">
+		<div class="form-group">
 			<label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
 			<div class="col-lg-10">
                 <?php echo Element::select('announce[category_id]', $categories, $announce->getCategoryId(), array('class' => 'form-control')); ?>
 			</div>
 		</div>
 		
-		<div class="form-group clearfix">
+		<div class="form-group">
 			<label class="col-lg-2 control-label"><?php $this->show('Introduction'); ?></label>
 			<div class="col-lg-10">
                 <?php echo Element::textarea('announce[intro]', $announce->getIntro(), array('data-wysiwyg' => 'true')); ?>
 			</div>
 		</div>
 		
-		<div class="form-group clearfix">
+		<div class="form-group">
 			<label class="col-lg-2 control-label"><?php $this->show('Full text'); ?></label>
 			<div class="col-lg-10">
                 <?php echo Element::textarea('announce[full]', $announce->getFull(), array('data-wysiwyg' => 'true')); ?>
@@ -47,21 +46,21 @@ use Krystal\Form\Element;
 		</div>
 		
 		<div class="options">
-			<div class="form-group clearfix">
+			<div class="form-group">
 				<label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
 				<div class="col-lg-10">
                     <?php echo Element::checkbox('announce[published]', $announce->getPublished(), array('class' => 'form-control')); ?>
 				</div>
 			</div>
 			
-			<div class="form-group clearfix">
+			<div class="form-group">
 				<label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
 				<div class="col-lg-10">
                     <?php echo Element::checkbox('announce[seo]', $announce->getSeo(), array('class' => 'form-control')); ?>
 				</div>
 			</div>
 
-			<div class="form-group clearfix">
+			<div class="form-group">
 				<label class="col-lg-2 control-label"><?php $this->show('Icon'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
@@ -71,7 +70,7 @@ use Krystal\Form\Element;
 				</div>
 			</div>
 			
-			<div class="form-group clearfix">
+			<div class="form-group">
 				<label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
@@ -81,7 +80,7 @@ use Krystal\Form\Element;
 				</div>
 			</div>
 			
-			<div class="form-group clearfix">
+			<div class="form-group">
 				<label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
@@ -93,7 +92,7 @@ use Krystal\Form\Element;
 				</div>
 			</div>
             
-            <div class="form-group clearfix">
+            <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
                 <div class="col-lg-10">
                     <div class="input-group">
@@ -103,7 +102,7 @@ use Krystal\Form\Element;
                 </div>
             </div>
 			
-			<div class="form-group clearfix">
+			<div class="form-group">
 				<label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
@@ -113,7 +112,7 @@ use Krystal\Form\Element;
 				</div>
 			</div>
 			
-			<div class="form-group clearfix">
+			<div class="form-group">
 				<label class="col-lg-2 control-label"><?php $this->show('Meta-Description'); ?></label>
 				<div class="col-lg-10">
                     <?php echo Element::textarea('announce[meta_description]', $announce->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
