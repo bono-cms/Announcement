@@ -210,6 +210,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
         }
 
         $input['slug'] = $this->webPageManager->sluggify($input['slug']);
+
         return $input;
     }
 
@@ -228,7 +229,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
 
         $id = $this->getLastId();
 
-        $this->track('Announce "%s" has been added', $input['title']);
+        $this->track('Announce "%s" has been added', $input['name']);
         $this->webPageManager->add($id, $input['slug'], 'Announcements', 'Announcement:Announce@indexAction', $this->announceMapper);
 
         return true;
@@ -245,7 +246,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
         $input = $this->prepareInput($input);
         $this->webPageManager->update($input['web_page_id'], $input['slug']);
 
-        $this->track('Announce "%s" has been updated', $input['title']);
+        $this->track('Announce "%s" has been updated', $input['name']);
 
         return $this->announceMapper->update(ArrayUtils::arrayWithout($input, array('slug')));
     }
