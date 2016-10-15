@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Fixed issue with quote escaping
  * Added optional `icon` attribute
  * Fixed issue with non-ability to fetch ids in multilingual site
  * Added support for table prefix
