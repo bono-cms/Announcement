@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Replaced `text` input with `textarea` for `keywords` attribute
  * Fixed issue with quote escaping
  * Added optional `icon` attribute
  * Fixed issue with non-ability to fetch ids in multilingual site
