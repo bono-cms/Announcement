@@ -29,7 +29,7 @@ final class Announce extends AbstractController
             // Load view plugins
             $this->loadSitePlugins();
             $this->view->getBreadcrumbBag()
-                       ->addOne($announce->getTitle());
+                       ->addOne($announce->getName());
 
             return $this->view->render('announce', array(
                 'page' => $announce,
