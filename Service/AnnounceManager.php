@@ -211,6 +211,10 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
 
         $input['slug'] = $this->webPageManager->sluggify($input['slug']);
 
+        // Safe type casting
+        $input['web_page_id'] = (int) $input['web_page_id'];
+        $input['order'] = (int) $input['order'];
+
         return $input;
     }
 
@@ -223,14 +227,12 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     public function add(array $input)
     {
         $input = $this->prepareInput($input);
-        $input['web_page_id'] = '';
-
         $this->announceMapper->insert(ArrayUtils::arrayWithout($input, array('slug')));
 
         $id = $this->getLastId();
 
         $this->track('Announce "%s" has been added', $input['name']);
-        $this->webPageManager->add($id, $input['slug'], 'Announcements', 'Announcement:Announce@indexAction', $this->announceMapper);
+        $this->webPageManager->add($id, $input['slug'], 'Announcement', 'Announcement:Announce@indexAction', $this->announceMapper);
 
         return true;
     }
