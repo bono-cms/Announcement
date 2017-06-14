@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Compact announce form view in administration panel
  * Replaced `text` input with `textarea` for `keywords` attribute
  * Fixed issue with quote escaping
  * Added optional `icon` attribute
