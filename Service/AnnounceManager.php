@@ -199,7 +199,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     private function prepareInput(array $input)
     {
-        // Empty slug is always taken from a title
+        // Empty slug is always taken from a name
         if (empty($input['slug'])) {
             $input['slug'] = $input['name'];
         }
