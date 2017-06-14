@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Two grid view on main page
  * Compact announce form view in administration panel
  * Replaced `text` input with `textarea` for `keywords` attribute
  * Fixed issue with quote escaping
