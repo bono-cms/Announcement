@@ -285,9 +285,9 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      * @param string $categoryId
      * @return array
      */
-    public function fetchAllPublishedByCategoryId($categoryId)
+    public function fetchAllPublished($categoryId)
     {
-        return $this->prepareResults($this->announceMapper->fetchAllPublishedByCategoryId($categoryId));
+        return $this->prepareResults($this->announceMapper->fetchAllPublished($categoryId));
     }
 
     /**

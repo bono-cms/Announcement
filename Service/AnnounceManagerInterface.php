@@ -90,6 +90,14 @@ interface AnnounceManagerInterface
     public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId = null);
 
     /**
+     * Fetches all published announce entities associated with provided category id
+     * 
+     * @param string $categoryId
+     * @return array
+     */
+    public function fetchAllPublished($categoryId);
+
+    /**
      * Deletes an announce by its associated id
      * 
      * @param string $id Announce id

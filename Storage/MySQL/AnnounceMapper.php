@@ -156,18 +156,6 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     }
 
     /**
-     * Fetches all published announces associated with provided category id
-     * 
-     * @param string $id
-     * @return array
-     */
-    public function fetchAllPublishedByCategoryId($id)
-    {
-        return $this->getSelectQuery(true, $id)
-                    ->queryAll();
-    }
-
-    /**
      * Fetches all announces filtered by pagination
      * 
      * @param string $categoryId
@@ -187,11 +175,12 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     /**
      * Fetches all published announces
      * 
+     * @param string $id Category id
      * @return array
      */
-    public function fetchAllPublished()
+    public function fetchAllPublished($id)
     {
-        return $this->getSelectQuery(true)
+        return $this->getSelectQuery(true, $id)
                     ->queryAll();
     }
 }

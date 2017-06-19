@@ -103,7 +103,8 @@ interface AnnounceMapperInterface
     /**
      * Fetches all published announces
      * 
+     * @param string $id Category id
      * @return array
      */
-    public function fetchAllPublished();
+    public function fetchAllPublished($id);
 }
