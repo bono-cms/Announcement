@@ -265,40 +265,18 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     }
 
     /**
-     * Fetches all published announce entities filtered by pagination
-     * 
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllPublishedByPage($page, $itemsPerPage)
-    {
-        return $this->prepareResults($this->announceMapper->fetchAllPublishedByPage($page, $itemsPerPage));
-    }
-
-    /**
      * Fetches all announce entities filtered by pagination
      * 
+     * @param string $categoryId
      * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
+     * @param boolean $published Whether to fetch only published announces
+     * @param integer $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage)
+    public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId = null)
     {
-        return $this->prepareResults($this->announceMapper->fetchAllByPage($page, $itemsPerPage));
-    }
-
-    /**
-     * Fetches all announce entities associated with provided category id and filtered by pagination
-     * 
-     * @param string $categoryId
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByCategoryIdAndPage($categoryId, $page, $itemsPerPage)
-    {
-        return $this->prepareResults($this->announceMapper->fetchAllByCategoryIdAndPage($categoryId, $page, $itemsPerPage));
+        return $this->prepareResults($this->announceMapper->fetchAllByPage($page, $itemsPerPage, $published, $categoryId));
     }
 
     /**

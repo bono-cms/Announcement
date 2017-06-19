@@ -54,22 +54,6 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     }
 
     /**
-     * Queries for a result
-     * 
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @param boolean $published Whether to sort only published records
-     * @param string $categoryId Optional category id
-     * @return array
-     */
-    private function getResults($page, $itemsPerPage, $published, $categoryId = null)
-    {
-        return $this->getSelectQuery($published, $categoryId)
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
-    }
-
-    /**
      * Deletes all announces associated with provided category id
      * 
      * @param string $categoryId
@@ -186,38 +170,18 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     /**
      * Fetches all announces filtered by pagination
      * 
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByPage($page, $itemsPerPage)
-    {
-        return $this->getResults($page, $itemsPerPage, false);
-    }
-
-    /**
-     * Fetches all published announces filtered by pagination
-     * 
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllPublishedByPage($page, $itemsPerPage)
-    {
-        return $this->getResults($page, $itemsPerPage, true);
-    }
-
-    /**
-     * Fetches all published announces filter by pagination
-     * 
      * @param string $categoryId
-     * @param integer $page Current page
+     * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
+     * @param boolean $published Whether to fetch only published announces
+     * @param integer $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAllByCategoryIdAndPage($categoryId, $page, $itemsPerPage)
+    public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId)
     {
-        return $this->getResults($page, $itemsPerPage, false, $categoryId);
+        return $this->getSelectQuery($published, $categoryId)
+                    ->paginate($page, $itemsPerPage)
+                    ->queryAll();
     }
 
     /**

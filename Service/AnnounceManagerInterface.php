@@ -78,32 +78,16 @@ interface AnnounceManagerInterface
     public function fetchById($id);
 
     /**
-     * Fetches all published announces filtered by pagination
-     * 
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllPublishedByPage($page, $itemsPerPage);
-
-    /**
-     * Fetches all announces filtered by pagination
-     * 
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByPage($page, $itemsPerPage);
-
-    /**
-     * Fetches all announce associated with provided category id and filtered by pagination
+     * Fetches all announce entities filtered by pagination
      * 
      * @param string $categoryId
-     * @param integer $page Current page
+     * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
+     * @param boolean $published Whether to fetch only published announces
+     * @param integer $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAllByCategoryIdAndPage($categoryId, $page, $itemsPerPage);
+    public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId = null);
 
     /**
      * Deletes an announce by its associated id

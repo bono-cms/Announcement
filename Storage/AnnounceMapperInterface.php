@@ -91,11 +91,14 @@ interface AnnounceMapperInterface
     /**
      * Fetches all announces filtered by pagination
      * 
+     * @param string $categoryId
      * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
+     * @param boolean $published Whether to fetch only published announces
+     * @param integer $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage);
+    public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId);
 
     /**
      * Fetches all published announces
@@ -103,23 +106,4 @@ interface AnnounceMapperInterface
      * @return array
      */
     public function fetchAllPublished();
-
-    /**
-     * Fetches all published announces filtered by pagination
-     * 
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllPublishedByPage($page, $itemsPerPage);
-
-    /**
-     * Fetches all published announces filter by pagination
-     * 
-     * @param string $categoryId
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByCategoryIdAndPage($categoryId, $page, $itemsPerPage);
 }
