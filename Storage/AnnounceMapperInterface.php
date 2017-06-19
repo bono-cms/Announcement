@@ -98,7 +98,7 @@ interface AnnounceMapperInterface
      * @param integer $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId);
+    public function fetchAll($page, $itemsPerPage, $published, $categoryId);
 
     /**
      * Fetches all published announces

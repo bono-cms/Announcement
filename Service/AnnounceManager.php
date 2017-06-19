@@ -276,7 +276,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId = null)
     {
-        return $this->prepareResults($this->announceMapper->fetchAllByPage($page, $itemsPerPage, $published, $categoryId));
+        return $this->prepareResults($this->announceMapper->fetchAll($page, $itemsPerPage, $published, $categoryId));
     }
 
     /**

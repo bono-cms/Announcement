@@ -26,34 +26,6 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     }
 
     /**
-     * Returns shared select
-     * 
-     * @param boolean $published
-     * @param string $categoryId
-     * @return \Krystal\Db\Sql\Db
-     */
-    private function getSelectQuery($published, $categoryId = null)
-    {
-        $db = $this->db->select('*')
-                       ->from(static::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId());
-
-        if ($categoryId !== null) {
-            $db->andWhereEquals('category_id', $categoryId);
-        }
-
-        if ($published === true) {
-            $db->andWhereEquals('published', '1')
-               ->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'));
-        } else {
-            $db->orderBy('id')
-               ->desc();
-        }
-
-        return $db;
-    }
-
-    /**
      * Deletes all announces associated with provided category id
      * 
      * @param string $categoryId
@@ -165,11 +137,30 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      * @param integer $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId)
+    public function fetchAll($page, $itemsPerPage, $published, $categoryId)
     {
-        return $this->getSelectQuery($published, $categoryId)
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->whereEquals('lang_id', $this->getLangId());
+
+        if ($categoryId !== null) {
+            $db->andWhereEquals('category_id', $categoryId);
+        }
+
+        if ($published === true) {
+            $db->andWhereEquals('published', '1')
+               ->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'));
+        } else {
+            $db->orderBy('id')
+               ->desc();
+        }
+
+        // Paginate if required
+        if ($page !== null && $itemsPerPage !== null) {
+            $db->paginate($page, $itemsPerPage);
+        }
+
+        return $db->queryAll();
     }
 
     /**
@@ -180,7 +171,6 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public function fetchAllPublished($id)
     {
-        return $this->getSelectQuery(true, $id)
-                    ->queryAll();
+        return $this->fetchAll(null, null, true, $id);
     }
 }
