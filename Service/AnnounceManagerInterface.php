@@ -80,7 +80,6 @@ interface AnnounceManagerInterface
     /**
      * Fetches all announce entities filtered by pagination
      * 
-     * @param string $categoryId
      * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
      * @param boolean $published Whether to fetch only published announces

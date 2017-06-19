@@ -182,7 +182,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
             ->setIcon($announce['icon'], VirtualEntity::FILTER_HTML)
             ->setPublished($announce['published'], VirtualEntity::FILTER_BOOL)
             ->setSeo($announce['seo'], VirtualEntity::FILTER_BOOL)
-            ->setSlug($this->webPageManager->fetchSlugByWebPageId($announce['web_page_id']), VirtualEntity::FILTER_HTML)
+            ->setSlug($announce['slug'], VirtualEntity::FILTER_HTML)
             ->setKeywords($announce['keywords'], VirtualEntity::FILTER_HTML)
             ->setMetaDescription($announce['meta_description'], VirtualEntity::FILTER_HTML)
             ->setPermanentUrl('/module/announcement/'.$entity->getId())
@@ -267,7 +267,6 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     /**
      * Fetches all announce entities filtered by pagination
      * 
-     * @param string $categoryId
      * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
      * @param boolean $published Whether to fetch only published announces

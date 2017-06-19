@@ -12,6 +12,7 @@
 namespace Announcement\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
+use Cms\Storage\MySQL\WebPageMapper;
 use Announcement\Storage\AnnounceMapperInterface;
 use Krystal\Db\Sql\RawSqlFragment;
 
@@ -23,6 +24,44 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     public static function getTableName()
     {
         return self::getWithPrefix('bono_module_announcement_announces');
+    }
+
+    /**
+     * Append web page relation by linked IDs
+     * 
+     * @return void
+     */
+    private function appendWebPageRelation()
+    {
+        $this->db->leftJoin(WebPageMapper::getTableName())
+                 ->on()
+                 ->equals(self::getFullColumnName('web_page_id'), new RawSqlFragment(WebPageMapper::getFullColumnName('id')));
+    }
+
+    /**
+     * Returns shared columns to be selected
+     * 
+     * @return array
+     */
+    private function getSharedColumns()
+    {
+        return array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('lang_id'),
+            self::getFullColumnName('web_page_id'),
+            self::getFullColumnName('category_id'),
+            self::getFullColumnName('title'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('intro'),
+            self::getFullColumnName('full'),
+            self::getFullColumnName('icon'),
+            self::getFullColumnName('order'),
+            self::getFullColumnName('published'),
+            self::getFullColumnName('seo'),
+            self::getFullColumnName('keywords'),
+            self::getFullColumnName('meta_description'),
+            WebPageMapper::getFullColumnName('slug'),
+        );
     }
 
     /**
@@ -124,13 +163,19 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public function fetchById($id)
     {
-        return $this->findByPk($id);
+        $db = $this->db->select($this->getSharedColumns())
+                       ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
+
+        return $db->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId())
+                  ->andWhereEquals(self::getFullColumnName('id'), $id)
+                  ->query();
     }
 
     /**
      * Fetches all announces filtered by pagination
      * 
-     * @param string $categoryId
      * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
      * @param boolean $published Whether to fetch only published announces
@@ -139,19 +184,21 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public function fetchAll($page, $itemsPerPage, $published, $categoryId)
     {
-        $db = $this->db->select('*')
-                       ->from(self::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId());
+        $db = $this->db->select($this->getSharedColumns())
+                       ->from(self::getTableName());
+
+        $this->appendWebPageRelation();
+        $db->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId());
 
         if ($categoryId !== null) {
-            $db->andWhereEquals('category_id', $categoryId);
+            $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);
         }
 
         if ($published === true) {
-            $db->andWhereEquals('published', '1')
+            $db->andWhereEquals(self::getFullColumnName('published'), '1')
                ->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'));
         } else {
-            $db->orderBy('id')
+            $db->orderBy(self::getFullColumnName('id'))
                ->desc();
         }
 
