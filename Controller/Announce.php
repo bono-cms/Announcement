@@ -23,7 +23,8 @@ final class Announce extends AbstractController
      */
     public function indexAction($id)
     {
-        $announce = $this->getModuleService('announceManager')->fetchById($id);
+        $announceManager = $this->getModuleService('announceManager');
+        $announce = $announceManager->fetchById($id, false);
 
         if ($announce !== false) {
             // Load view plugins
@@ -33,7 +34,8 @@ final class Announce extends AbstractController
 
             return $this->view->render('announce', array(
                 'page' => $announce,
-                'announce' => $announce
+                'announce' => $announce,
+                'languages' => $announceManager->getSwitchUrls($id)
             ));
 
         } else {

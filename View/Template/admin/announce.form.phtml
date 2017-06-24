@@ -1,8 +1,9 @@
-<?php defined('KRYSTAL') or die; ?>
 <?php
 
 use Krystal\Form\Element;
+use Cms\Service\LanguageManager;
 
+defined('KRYSTAL') or die;
 ?>
 
 <?php if (!empty($categories)): ?>
@@ -16,94 +17,119 @@ use Krystal\Form\Element;
     <div class="tab-content">
 		<div class="tab-pane fade in active" id="page" role="tabpanel">
             <div class="well">
-                <?php echo Element::hidden('announce[id]', $announce->getId()); ?>
-                <?php echo Element::hidden('announce[web_page_id]', $announce->getWebPageId()); ?>
-                <?php echo Element::hidden('web_page_id', $announce->getWebPageId()); ?>
 
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-                    <div class="col-lg-10">
-                        <div class="input-group date">
-                            <?php echo Element::text('announce[name]', $announce->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name of this announce'))); ?>
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil" data-toggle="tooltip"></i></span>
+                <?php if (count($languages) > 1): ?>
+                <ul class="nav nav-tabs" role="tablist">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <li role="presentation" class="<?php echo $index == 0 ? 'active' : null; ?>"><a href="<?php printf('#language-%s', $language->getId()); ?>" role="tab" data-toggle="tab"><i class="<?php printf('famfamfam-flag-%s', $language->getFlag()); ?>"></i> <?php echo $language->getName(); ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+
+                <br />
+
+                <div class="tab-content">
+                    <?php foreach ($languages as $index => $language): ?>
+                    <div class="tab-pane fade in <?php echo $index == 0 ? 'active' : null; ?>" id="<?php printf('language-%s', $language->getId()); ?>" role="tabpanel">
+
+                        <?php $entity = LanguageManager::findByLangId($language->getId(), $announce); ?>
+
+                        <?php echo Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
+                        <?php echo Element::hidden(sprintf('translation[%s][web_page_id]', $language->getId()), $entity->getWebPageId()); ?>
+                        <?php echo Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
+
+                        <h2 class="text-muted"><?php echo $language->getName(); ?></h2>
+                        <br />
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                            <div class="col-lg-10">
+                                <div class="input-group date">
+                                    <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Name of this announce'))); ?>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil" data-toggle="tooltip"></i></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Introduction'); ?></label>
-                    <div class="col-lg-10">
-                        <?php echo Element::textarea('announce[intro]', $announce->getIntro(), array('data-wysiwyg' => 'true')); ?>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php $this->show('Introduction'); ?></label>
+                            <div class="col-lg-10">
+                                <?php echo Element::textarea(sprintf('translation[%s][intro]', $language->getId()), $entity->getIntro(), array('data-wysiwyg' => 'true')); ?>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Full text'); ?></label>
-                    <div class="col-lg-10">
-                        <?php echo Element::textarea('announce[full]', $announce->getFull(), array('data-wysiwyg' => 'true')); ?>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php $this->show('Full text'); ?></label>
+                            <div class="col-lg-10">
+                                <?php echo Element::textarea(sprintf('translation[%s][full]', $language->getId()), $entity->getFull(), array('data-wysiwyg' => 'true')); ?>
+                            </div>
+                        </div>
 
-                <div class="options">
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text('announce[slug]', $announce->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this announce. By default is taken from a title'))); ?>
-                                <span class="input-group-addon">
-                                    <a href="#" data-button="slug"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh'); ?>"></i></a>
-                                </span>
+                        <div class="options">
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
+                                <div class="col-lg-10">
+                                    <div class="input-group">
+                                        <?php echo Element::text(sprintf('translation[%s][slug]', $language->getId()), $entity->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this announce. By default is taken from a title'))); ?>
+                                        <span class="input-group-addon">
+                                            <a href="#" data-button="slug"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh'); ?>"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
+                                <div class="col-lg-10">
+                                    <div class="input-group">
+                                        <?php echo Element::text(sprintf('translation[%s][title]', $language->getId()), $entity->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Announce title'))); ?>
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
+                                <div class="col-lg-10">
+                                    <?php echo Element::textarea(sprintf('translation[%s][keywords]', $language->getId()), $entity->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Meta-Description'); ?></label>
+                                <div class="col-lg-10">
+                                    <?php echo Element::textarea(sprintf('translation[%s][meta_description]', $language->getId()), $entity->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text('announce[title]', $announce->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate('Announce title'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::textarea('announce[keywords]', $announce->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Meta-Description'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::textarea('announce[meta_description]', $announce->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
         
         <div role="tabpanel" class="tab-pane" id="configuration">
             <div class="well">
+                <?php echo Element::hidden('announce[id]', $entity->getId()); ?>
+
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
                     <div class="col-lg-10">
-                        <?php echo Element::select('announce[category_id]', $categories, $announce->getCategoryId(), array('class' => 'form-control')); ?>
+                        <?php echo Element::select('announce[category_id]', $categories, $entity->getCategoryId(), array('class' => 'form-control')); ?>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
                     <div class="col-lg-10">
-                        <?php echo Element::checkbox('announce[published]', $announce->getPublished(), array('class' => 'form-control')); ?>
+                        <?php echo Element::checkbox('announce[published]', $entity->getPublished(), array('class' => 'form-control')); ?>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
                     <div class="col-lg-10">
-                        <?php echo Element::checkbox('announce[seo]', $announce->getSeo(), array('class' => 'form-control')); ?>
+                        <?php echo Element::checkbox('announce[seo]', $entity->getSeo(), array('class' => 'form-control')); ?>
                     </div>
                 </div>
 
@@ -111,7 +137,7 @@ use Krystal\Form\Element;
                     <label class="col-lg-2 control-label"><?php $this->show('Icon'); ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">
-                            <?php echo Element::text('announce[icon]', $announce->getIcon(), array('class' => 'form-control', 'placeholder' => $this->translate('Path to the icon for this announce'))); ?>
+                            <?php echo Element::text('announce[icon]', $entity->getIcon(), array('class' => 'form-control', 'placeholder' => $this->translate('Path to the icon for this announce'))); ?>
                             <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                         </div>
                     </div>
@@ -121,7 +147,7 @@ use Krystal\Form\Element;
                     <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">
-                            <?php echo Element::number('announce[order]', $announce->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Order of the announce to be created'))); ?>
+                            <?php echo Element::number('announce[order]', $entity->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Order of the announce to be created'))); ?>
                             <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                         </div>
                     </div>
@@ -132,7 +158,7 @@ use Krystal\Form\Element;
         
     </div>
 
-    <?php if ($announce->getId()): ?>
+    <?php if (!$new): ?>
 
     <button data-button="save" data-url="<?php echo $this->url('Announcement:Admin:Announce@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
 	<button data-button="save-create" data-back-url="<?php echo $this->url('Announcement:Admin:Announce@addAction'); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>

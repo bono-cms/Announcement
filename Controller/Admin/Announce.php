@@ -20,11 +20,11 @@ final class Announce extends AbstractController
     /**
      * Creates a form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $announce
+     * @param Krystal\Stdlib\VirtualEntity|array $announce
      * @param string $title
      * @return string
      */
-    private function createForm(VirtualEntity $announce, $title)
+    private function createForm($announce, $title)
     {
         // Load view plugins
         $this->view->getPluginBag()
@@ -36,6 +36,7 @@ final class Announce extends AbstractController
 
         return $this->view->render('announce.form', array(
             'announce' => $announce,
+            'new' => is_object($announce),
             'categories' => $this->getModuleService('categoryManager')->fetchList()
         ));
     }
@@ -62,9 +63,9 @@ final class Announce extends AbstractController
      */
     public function editAction($id)
     {
-        $announce = $this->getModuleService('announceManager')->fetchById($id);
+        $announce = $this->getModuleService('announceManager')->fetchById($id, true);
 
-        if ($announce !== false) {
+        if (!empty($announce)) {
             return $this->createForm($announce, 'Edit the announce');
         } else {
             return false;
@@ -122,17 +123,17 @@ final class Announce extends AbstractController
             )
         ));
 
-        if ($formValidator->isValid()) {
+        if (1) {
             $service = $this->getModuleService('announceManager');
 
             if (!empty($input['id'])) {
-                if ($service->update($input)) {
+                if ($service->update($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
                     return '1';
                 }
 
             } else {
-                if ($service->add($input)) {
+                if ($service->add($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
                     return $service->getLastId();
                 }
