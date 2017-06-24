@@ -70,12 +70,13 @@ interface AnnounceManagerInterface
     public function update(array $input);
 
     /**
-     * Fetches an announce by its associated id
+     * Fetches announce's entity by its associated id
      * 
      * @param string $id
-     * @return array
+     * @param boolean $withTranslations Whether to fetch all translations or not
+     * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchById($id);
+    public function fetchById($id, $withTranslations);
 
     /**
      * Fetches all announce entities filtered by pagination

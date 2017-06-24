@@ -27,6 +27,14 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return self::getWithPrefix('bono_module_announcement_announces_translations');
+    }
+
+    /**
      * Append web page relation by linked IDs
      * 
      * @return void
@@ -41,27 +49,35 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     /**
      * Returns shared columns to be selected
      * 
+     * @param boolean $all Whether to select all columns
      * @return array
      */
-    private function getSharedColumns()
+    private function getSharedColumns($all)
     {
-        return array(
+        $columns = array(
             self::getFullColumnName('id'),
-            self::getFullColumnName('lang_id'),
-            self::getFullColumnName('web_page_id'),
+            self::getFullColumnName('lang_id', self::getTranslationTable()),
+            self::getFullColumnName('web_page_id', self::getTranslationTable()),
             self::getFullColumnName('category_id'),
-            self::getFullColumnName('title'),
-            self::getFullColumnName('name'),
-            self::getFullColumnName('intro'),
-            self::getFullColumnName('full'),
-            self::getFullColumnName('icon'),
             self::getFullColumnName('order'),
             self::getFullColumnName('published'),
             self::getFullColumnName('seo'),
-            self::getFullColumnName('keywords'),
-            self::getFullColumnName('meta_description'),
             WebPageMapper::getFullColumnName('slug'),
+            self::getFullColumnName('name', self::getTranslationTable()),
         );
+
+        if ($all === true) {
+            $columns = array_merge($columns, array(
+                self::getFullColumnName('icon'),
+                self::getFullColumnName('title', self::getTranslationTable()),
+                self::getFullColumnName('intro', self::getTranslationTable()),
+                self::getFullColumnName('full', self::getTranslationTable()),
+                self::getFullColumnName('keywords', self::getTranslationTable()),
+                self::getFullColumnName('meta_description', self::getTranslationTable()),
+            ));
+        }
+
+        return $columns;
     }
 
     /**
@@ -158,19 +174,35 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     /**
      * Fetches announce data by its associated id
      * 
-     * @param string $id
+     * @param string $id Announce ID
+     * @param boolean $withTranslations Whether to fetch all translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        $db = $this->db->select($this->getSharedColumns())
-                       ->from(self::getTableName());
+        $db = $this->db->select($this->getSharedColumns(true))
+                       ->from(self::getTableName())
+                       ->innerJoin(self::getTranslationTable())
+                       ->on()
+                       ->equals(
+                            self::getFullColumnName('id'), 
+                            new RawSqlFragment(self::getFullColumnName('id', self::getTranslationTable()))
+                        )
+                        ->innerJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            WebPageMapper::getFullColumnName('id'),
+                            new RawSqlFragment(self::getFullColumnName('web_page_id', self::getTranslationTable()))
+                        );
 
-        $this->appendWebPageRelation();
+        $db->whereEquals(self::getFullColumnName('id'), $id);
 
-        return $db->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId())
-                  ->andWhereEquals(self::getFullColumnName('id'), $id)
-                  ->query();
+        if ($withTranslations === true) {
+            return $db->queryAll();
+        } else {
+            return $db->andWhereEquals(self::getFullColumnName('lang_id', self::getTranslationTable()), $this->getLangId())
+                      ->query();
+        }
     }
 
     /**
@@ -184,11 +216,27 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public function fetchAll($page, $itemsPerPage, $published, $categoryId)
     {
-        $db = $this->db->select($this->getSharedColumns())
-                       ->from(self::getTableName());
+        $db = $this->db->select($this->getSharedColumns(false))
+                       ->from(self::getTableName())
+                       ->innerJoin(self::getTranslationTable())
+                       ->on()
+                       ->equals(
+                            self::getFullColumnName('id'), 
+                            new RawSqlFragment(self::getFullColumnName('id', self::getTranslationTable()))
+                        )
+                        ->innerJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            WebPageMapper::getFullColumnName('id'),
+                            new RawSqlFragment(self::getFullColumnName('web_page_id', self::getTranslationTable()))
+                        )
+                        ->rawAnd()
+                        ->equals(
+                            WebPageMapper::getFullColumnName('lang_id'),
+                            new RawSqlFragment(self::getFullColumnName('lang_id', self::getTranslationTable()))
+                        );
 
-        $this->appendWebPageRelation();
-        $db->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId());
+        $db->whereEquals(self::getFullColumnName('lang_id', self::getTranslationTable()), $this->getLangId());
 
         if ($categoryId !== null) {
             $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);

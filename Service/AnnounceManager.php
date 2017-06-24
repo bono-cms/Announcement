@@ -166,7 +166,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     /**
      * {@inheritDoc}
      */
-    protected function toEntity(array $announce)
+    protected function toEntity(array $announce, $full = false)
     {
         $entity = new VirtualEntity();
         $entity->setId($announce['id'], VirtualEntity::FILTER_INT)
@@ -174,48 +174,48 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
             ->setLangId($announce['lang_id'], VirtualEntity::FILTER_INT)
             ->setWebPageId($announce['web_page_id'], VirtualEntity::FILTER_INT)
             ->setCategoryName($this->categoryMapper->fetchNameById($announce['category_id']), VirtualEntity::FILTER_HTML)
-            ->setTitle($announce['title'], VirtualEntity::FILTER_HTML)
             ->setName($announce['name'], VirtualEntity::FILTER_HTML)
-            ->setIntro($announce['intro'], VirtualEntity::FILTER_SAFE_TAGS)
-            ->setFull($announce['full'], VirtualEntity::FILTER_SAFE_TAGS)
-            ->setOrder($announce['order'], VirtualEntity::FILTER_INT)
-            ->setIcon($announce['icon'], VirtualEntity::FILTER_HTML)
             ->setPublished($announce['published'], VirtualEntity::FILTER_BOOL)
+            ->setOrder($announce['order'], VirtualEntity::FILTER_INT)
             ->setSeo($announce['seo'], VirtualEntity::FILTER_BOOL)
             ->setSlug($announce['slug'], VirtualEntity::FILTER_HTML)
-            ->setKeywords($announce['keywords'], VirtualEntity::FILTER_HTML)
-            ->setMetaDescription($announce['meta_description'], VirtualEntity::FILTER_HTML)
-            ->setPermanentUrl('/module/announcement/'.$entity->getId())
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()));
+
+        if ($full === true) {
+            $entity->setTitle($announce['title'], VirtualEntity::FILTER_HTML)
+                   ->setIntro($announce['intro'], VirtualEntity::FILTER_SAFE_TAGS)
+                   ->setFull($announce['full'], VirtualEntity::FILTER_SAFE_TAGS)
+                   ->setIcon($announce['icon'], VirtualEntity::FILTER_HTML)
+                   ->setKeywords($announce['keywords'], VirtualEntity::FILTER_HTML)
+                   ->setMetaDescription($announce['meta_description'], VirtualEntity::FILTER_HTML)
+                   ->setPermanentUrl('/module/announcement/'.$entity->getId());
+        }
 
         return $entity;
     }
 
     /**
-     * Prepares a container
+     * Saves a page
      * 
-     * @param array $input Raw input data
+     * @param array $input
+     * @return boolean
+     */
+    private function savePage(array $input)
+    {
+        $input['announce']['order'] = (int) $input['announce']['order'];
+
+        return $this->announceMapper->savePage('Announcement', 'Announcement:Announce@indexAction', $input['announce'], $input['translation']);
+    }
+
+    /**
+     * Returns a collection of switching URLs
+     * 
+     * @param string $id Announce ID
      * @return array
      */
-    private function prepareInput(array $input)
+    public function getSwitchUrls($id)
     {
-        // Empty slug is always taken from a name
-        if (empty($input['slug'])) {
-            $input['slug'] = $input['name'];
-        }
-
-        // Empty title is taken from name
-        if (empty($input['title'])) {
-            $input['title'] = $input['name'];
-        }
-
-        $input['slug'] = $this->webPageManager->sluggify($input['slug']);
-
-        // Safe type casting
-        $input['web_page_id'] = (int) $input['web_page_id'];
-        $input['order'] = (int) $input['order'];
-
-        return $input;
+        return $this->announceMapper->createSwitchUrls($id, 'Announcement', 'Announcement:Announce@indexAction');
     }
 
     /**
@@ -226,14 +226,9 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function add(array $input)
     {
-        $input = $this->prepareInput($input);
-        $this->announceMapper->insert(ArrayUtils::arrayWithout($input, array('slug')));
+        $this->savePage($input);
 
-        $id = $this->getLastId();
-
-        $this->track('Announce "%s" has been added', $input['name']);
-        $this->webPageManager->add($id, $input['slug'], 'Announcement', 'Announcement:Announce@indexAction', $this->announceMapper);
-
+        #$this->track('Announce "%s" has been added', $input['name']);
         return true;
     }
 
@@ -245,23 +240,26 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function update(array $input)
     {
-        $input = $this->prepareInput($input);
-        $this->webPageManager->update($input['web_page_id'], $input['slug']);
+        $this->savePage($input);
 
-        $this->track('Announce "%s" has been updated', $input['name']);
-
-        return $this->announceMapper->update(ArrayUtils::arrayWithout($input, array('slug')));
+        #$this->track('Announce "%s" has been updated', $input['name']);
+        return true;
     }
 
     /**
      * Fetches announce's entity by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch all translations or not
      * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->prepareResult($this->announceMapper->fetchById($id));
+        if ($withTranslations === true) {
+            return $this->prepareResults($this->announceMapper->fetchById($id, true), true);
+        } else {
+            return $this->prepareResult($this->announceMapper->fetchById($id, false), true);
+        }
     }
 
     /**
@@ -275,7 +273,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId = null)
     {
-        return $this->prepareResults($this->announceMapper->fetchAll($page, $itemsPerPage, $published, $categoryId));
+        return $this->prepareResults($this->announceMapper->fetchAll($page, $itemsPerPage, $published, $categoryId), false);
     }
 
     /**
@@ -286,7 +284,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function fetchAllPublished($categoryId)
     {
-        return $this->prepareResults($this->announceMapper->fetchAllPublished($categoryId));
+        return $this->prepareResults($this->announceMapper->fetchAllPublished($categoryId), false);
     }
 
     /**
@@ -298,10 +296,10 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     public function deleteById($id)
     {
         // Grab announce's title before we remove it
-        $title = Filter::escape($this->announceMapper->fetchTitleById($id));
+        #$title = Filter::escape($this->announceMapper->fetchTitleById($id));
 
-        if ($this->delete($id)) {
-            $this->track('Announce "%s" has been removed', $title);
+        if ($this->announceMapper->deletePage($id)) {
+            #$this->track('Announce "%s" has been removed', $title);
             return true;
 
         } else {
@@ -317,27 +315,9 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function deleteByIds(array $ids)
     {
-        foreach ($ids as $id) {
-            if (!$this->delete($id)) {
-                return false;
-            }
-        }
+        $this->announceMapper->deletePage($ids);
 
         $this->track('Batch removal of %s announces', count($ids));
         return true;
-    }
-
-    /**
-     * Deletes an announce by its associated id
-     * 
-     * @param string $id Announce id
-     * @return boolean
-     */ 
-    private function delete($id)
-    {
-        $webPageId = $this->announceMapper->fetchWebPageIdById($id);
-        $this->webPageManager->deleteById($webPageId);
-
-        return $this->announceMapper->deleteById($id);
     }
 }

@@ -56,10 +56,11 @@ interface AnnounceMapperInterface
     /**
      * Fetches announce data by its associated id
      * 
-     * @param string $id
+     * @param string $id Announce ID
+     * @param boolean $withTranslations Whether to fetch all translations or not
      * @return array
      */
-    public function fetchById($id);
+    public function fetchById($id, $withTranslations);
 
     /**
      * Updates the sort order
