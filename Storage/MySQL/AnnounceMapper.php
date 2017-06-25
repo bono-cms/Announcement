@@ -80,39 +80,14 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     }
 
     /**
-     * Updates the sort order
+     * Update settings
      * 
-     * @param string $id PK's value
-     * @param string $order New sort order
+     * @param array $settings
      * @return boolean
      */
-    public function updateOrderById($id, $order)
+    public function updateSettings(array $settings)
     {
-        return $this->updateColumnByPk($id, 'order', $order);
-    }
-
-    /**
-     * Updates SEO value
-     * 
-     * @param string $id
-     * @param string $seo Either 0 or 1
-     * @return boolean
-     */
-    public function updateSeoById($id, $seo)
-    {
-        return $this->updateColumnByPk($id, 'seo', $seo);
-    }
-
-    /**
-     * Updates published value
-     * 
-     * @param string $id
-     * @param string $published Either 0 or 1
-     * @return boolean
-     */
-    public function updatePublishedById($id, $published)
-    {
-        return $this->updateColumnByPk($id, 'published', $published);
+        return $this->updateColumns($settings, array('order', 'seo', 'published'));
     }
 
     /**

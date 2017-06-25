@@ -14,6 +14,14 @@ namespace Announcement\Storage;
 interface AnnounceMapperInterface
 {
     /**
+     * Update settings
+     * 
+     * @param array $settings
+     * @return boolean
+     */
+    public function updateSettings(array $settings);
+
+    /**
      * Deletes all announces associated with provided category id
      * 
      * @param string $categoryId
@@ -29,33 +37,6 @@ interface AnnounceMapperInterface
      * @return array
      */
     public function fetchById($id, $withTranslations);
-
-    /**
-     * Updates the sort order
-     * 
-     * @param string $id PK's value
-     * @param string $order New sort order
-     * @return boolean
-     */
-    public function updateOrderById($id, $order);
-
-    /**
-     * Updates announce's seo value
-     * 
-     * @param string $id Advice id
-     * @param string $seo Either 0 or 1
-     * @return boolean
-     */
-    public function updateSeoById($id, $seo);
-
-    /**
-     * Updates announce's published value
-     * 
-     * @param string $id Advice id
-     * @param string $published Either 0 or 1
-     * @return boolean
-     */
-    public function updatePublishedById($id, $published);
 
     /**
      * Fetches all announces filtered by pagination

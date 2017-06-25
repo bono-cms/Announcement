@@ -16,28 +16,12 @@ use Krystal\Stdlib\VirtualEntity;
 interface AnnounceManagerInterface
 {
     /**
-     * Updates orders by their associated ids
+     * Update settings
      * 
-     * @param array $pair
+     * @param array $settings
      * @return boolean
      */
-    public function updateOrders(array $pair);
-
-    /**
-     * Updates published state by associated announce ids
-     * 
-     * @param array $pair
-     * @return boolean
-     */
-    public function updatePublished(array $pair);
-
-    /**
-     * Updates SEO state by associated announce ids
-     * 
-     * @param array $pair
-     * @return boolean
-     */
-    public function updateSeo(array $pair);
+    public function updateSettings(array $settings);
 
     /**
      * Returns last announce id
@@ -52,22 +36,6 @@ interface AnnounceManagerInterface
      * @return \Krystal\Paginate\Paginator
      */
     public function getPaginator();
-
-    /**
-     * Adds an announce
-     * 
-     * @param array $input Raw form data
-     * @return boolean
-     */
-    public function add(array $data);
-
-    /**
-     * Updates an announce
-     * 
-     * @param array $input Raw form data
-     * @return boolean
-     */
-    public function update(array $input);
 
     /**
      * Fetches announce's entity by its associated id

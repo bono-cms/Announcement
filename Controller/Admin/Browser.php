@@ -77,17 +77,10 @@ final class Browser extends AbstractController
      */
     public function tweakAction()
     {
-        if ($this->request->hasPost('seo', 'published', 'order')) {
-            $published = $this->request->getPost('published');
-            $seo = $this->request->getPost('seo');
-            $orders = $this->request->getPost('order');
-
+        if ($this->request->isPost()) {
             // Grab a service
             $announceManager = $this->getModuleService('announceManager');
-
-            $announceManager->updatePublished($published);
-            $announceManager->updateSeo($seo);
-            $announceManager->updateOrders($orders);
+            $announceManager->updateSettings($this->request->getPost());
 
             $this->flashBag->set('success', 'Announce settings have been updated successfully');
             return '1';
