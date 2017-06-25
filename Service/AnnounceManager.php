@@ -16,12 +16,11 @@ use Cms\Service\WebPageManagerInterface;
 use Cms\Service\HistoryManagerInterface;
 use Announcement\Storage\AnnounceMapperInterface;
 use Announcement\Storage\CategoryMapperInterface;
-use Menu\Contract\MenuAwareManager;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 use Krystal\Security\Filter;
 
-final class AnnounceManager extends AbstractManager implements AnnounceManagerInterface, MenuAwareManager
+final class AnnounceManager extends AbstractManager implements AnnounceManagerInterface
 {
     /**
      * Any compliant announce mapper
@@ -72,14 +71,6 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     private function track($message, $placeholder)
     {
         return $this->historyManager->write('Announcement', $message, $placeholder);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchNameByWebPageId($webPageId)
-    {
-        return $this->announceMapper->fetchNameByWebPageId($webPageId);
     }
 
     /**
