@@ -26,12 +26,10 @@ CREATE TABLE `bono_module_announcement_announces_translations` (
 
 ) DEFAULT CHARSET = UTF8;
 
-
 DROP TABLE IF EXISTS `bono_module_announcement_categories`;
 CREATE TABLE `bono_module_announcement_categories` (
 	
 	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	`lang_id` INT NOT NULL,
 	`name` varchar(254) NOT NULL,
 	`class` varchar(255) NOT NULL COMMENT 'Class to simplify rendering'
 	
