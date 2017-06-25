@@ -35,18 +35,6 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     }
 
     /**
-     * Append web page relation by linked IDs
-     * 
-     * @return void
-     */
-    private function appendWebPageRelation()
-    {
-        $this->db->leftJoin(WebPageMapper::getTableName())
-                 ->on()
-                 ->equals(self::getFullColumnName('web_page_id'), new RawSqlFragment(WebPageMapper::getFullColumnName('id')));
-    }
-
-    /**
      * Returns shared columns to be selected
      * 
      * @param boolean $all Whether to select all columns
@@ -92,39 +80,6 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     }
 
     /**
-     * Deletes an announce by its associated id
-     * 
-     * @param string $id Announce id
-     * @return boolean
-     */
-    public function deleteById($id)
-    {
-        return $this->deleteByPk($id);
-    }
-
-    /**
-     * Adds an announce
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function insert(array $input)
-    {
-        return $this->persist($this->getWithLang($input));
-    }
-
-    /**
-     * Updates an announce
-     * 
-     * @param array $input Raw input data
-     * @return boolean Depending on success
-     */
-    public function update(array $input)
-    {
-        return $this->persist($input);
-    }
-
-    /**
      * Updates the sort order
      * 
      * @param string $id PK's value
@@ -158,17 +113,6 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     public function updatePublishedById($id, $published)
     {
         return $this->updateColumnByPk($id, 'published', $published);
-    }
-
-    /**
-     * Fetches announce title by its associated id
-     * 
-     * @param string $id Announce id
-     * @return string
-     */
-    public function fetchTitleById($id)
-    {
-        return $this->findColumnByPk($id, 'title');
     }
 
     /**

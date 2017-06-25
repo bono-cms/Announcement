@@ -14,44 +14,12 @@ namespace Announcement\Storage;
 interface AnnounceMapperInterface
 {
     /**
-     * Fetches announce title by its associated id
-     * 
-     * @param string $id Announce id
-     * @return string
-     */
-    public function fetchTitleById($id);
-
-    /**
      * Deletes all announces associated with provided category id
      * 
      * @param string $categoryId
      * @return boolean
      */
     public function deleteAllByCategoryId($categoryId);
-
-    /**
-     * Deletes an announce by its associated id
-     * 
-     * @param string $id
-     * @return boolean
-     */
-    public function deleteById($id);
-
-    /**
-     * Inserts an announce
-     * 
-     * @param array $data
-     * @return boolean
-     */
-    public function insert(array $data);
-
-    /**
-     * Updates an announce
-     * 
-     * @param array $data
-     * @return boolean Depending on success
-     */
-    public function update(array $data);
 
     /**
      * Fetches announce data by its associated id
