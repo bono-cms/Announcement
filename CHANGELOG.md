@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Support complete internalization
  * Two grid view on main page
  * Compact announce form view in administration panel
  * Replaced `text` input with `textarea` for `keywords` attribute
@@ -21,6 +22,7 @@ CHANGELOG
  * Improved internals
 
 1.0
+
 ---
 
  * First public version
