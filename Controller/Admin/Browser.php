@@ -46,7 +46,7 @@ final class Browser extends AbstractController
         $paginator->setUrl($this->createUrl('Announcement:Admin:Browser@indexAction', array(), 1));
 
         return $this->createGrid(array(
-            'announces' => $this->getModuleService('announceManager')->fetchAllByPage($page, $this->getSharedPerPageCount(), false),
+            'announces' => $this->getModuleService('announceManager')->fetchAll($page, $this->getSharedPerPageCount(), false),
             'paginator' => $paginator,
         ));
     }
@@ -65,7 +65,7 @@ final class Browser extends AbstractController
 
         return $this->createGrid(array(
             'categoryId' => $id,
-            'announces' => $this->getModuleService('announceManager')->fetchAllByPage($page, $this->getSharedPerPageCount(), false, $id),
+            'announces' => $this->getModuleService('announceManager')->fetchAll($page, $this->getSharedPerPageCount(), false, $id),
             'paginator' => $paginator,
         ));
     }

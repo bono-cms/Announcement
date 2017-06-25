@@ -48,12 +48,4 @@ interface AnnounceMapperInterface
      * @return array
      */
     public function fetchAll($page, $itemsPerPage, $published, $categoryId);
-
-    /**
-     * Fetches all published announces
-     * 
-     * @param string $id Category id
-     * @return array
-     */
-    public function fetchAllPublished($id);
 }

@@ -47,7 +47,7 @@ interface AnnounceManagerInterface
     public function fetchById($id, $withTranslations);
 
     /**
-     * Fetches all announce entities filtered by pagination
+     * Fetches all announce entities
      * 
      * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
@@ -55,15 +55,7 @@ interface AnnounceManagerInterface
      * @param integer $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId = null);
-
-    /**
-     * Fetches all published announce entities associated with provided category id
-     * 
-     * @param string $categoryId
-     * @return array
-     */
-    public function fetchAllPublished($categoryId);
+    public function fetchAll($page, $itemsPerPage, $published, $categoryId = null);
 
     /**
      * Deletes an announce by its associated id

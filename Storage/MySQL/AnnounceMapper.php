@@ -176,15 +176,4 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
 
         return $db->queryAll();
     }
-
-    /**
-     * Fetches all published announces
-     * 
-     * @param string $id Category id
-     * @return array
-     */
-    public function fetchAllPublished($id)
-    {
-        return $this->fetchAll(null, null, true, $id);
-    }
 }

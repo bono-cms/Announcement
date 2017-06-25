@@ -54,7 +54,7 @@ final class SiteService implements SiteServiceInterface
 
         // Do the following query in case right id supplied
         if ($id) {
-            return $this->announceManager->fetchAllPublished($id);
+            return $this->announceManager->fetchAll(null, null, true, $id);
         } else {
             return array();
         }

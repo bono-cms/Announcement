@@ -223,7 +223,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     }
 
     /**
-     * Fetches all announce entities filtered by pagination
+     * Fetches all announce entities
      * 
      * @param integer $page Current page number
      * @param integer $itemsPerPage Per page count
@@ -231,20 +231,9 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      * @param integer $categoryId Optional category ID filter
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage, $published, $categoryId = null)
+    public function fetchAll($page, $itemsPerPage, $published, $categoryId = null)
     {
         return $this->prepareResults($this->announceMapper->fetchAll($page, $itemsPerPage, $published, $categoryId), false);
-    }
-
-    /**
-     * Fetches all published announce entities associated with provided category id
-     * 
-     * @param string $categoryId
-     * @return array
-     */
-    public function fetchAllPublished($categoryId)
-    {
-        return $this->prepareResults($this->announceMapper->fetchAllPublished($categoryId), false);
     }
 
     /**
