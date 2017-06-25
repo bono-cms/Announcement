@@ -31,13 +31,6 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     private $announceMapper;
 
     /**
-     * Any compliant category mapper
-     * 
-     * @var \Announcement\Storage\CategoryMapperInterface
-     */
-    private $categoryMapper;
-
-    /**
      * Web page manager for dealing with slugs
      * 
      * @var \Cms\Service\WebPageManagerInterface
@@ -55,19 +48,16 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      * State initialization
      * 
      * @param \Announcement\Storage\AnnounceMapperInterface $announceMapper Any mapper which implements AnnounceMapperInterface
-     * @param \Announcement\Storage\CategoryMapperInterface $categoryMapper Any mapper which implements CategoryMapperInterface
      * @param \Cms\Service\WebPageManagerInterface $webPageManager
      * @param \Cms\Service\HistoryManagerInterface $historyManager
      * @return void
      */
     public function __construct(
         AnnounceMapperInterface $announceMapper, 
-        CategoryMapperInterface $categoryMapper, 
         WebPageManagerInterface $webPageManager,
         HistoryManagerInterface $historyManager
     ){
         $this->announceMapper = $announceMapper;
-        $this->categoryMapper = $categoryMapper;
         $this->webPageManager = $webPageManager;
         $this->historyManager = $historyManager;
     }
@@ -133,7 +123,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
             ->setCategoryId($announce['category_id'], VirtualEntity::FILTER_INT)
             ->setLangId($announce['lang_id'], VirtualEntity::FILTER_INT)
             ->setWebPageId($announce['web_page_id'], VirtualEntity::FILTER_INT)
-            ->setCategoryName($this->categoryMapper->fetchNameById($announce['category_id']), VirtualEntity::FILTER_HTML)
+            ->setCategoryName(isset($announce['category']) ? $announce['category'] : null, VirtualEntity::FILTER_HTML)
             ->setName($announce['name'], VirtualEntity::FILTER_HTML)
             ->setPublished($announce['published'], VirtualEntity::FILTER_BOOL)
             ->setOrder($announce['order'], VirtualEntity::FILTER_INT)

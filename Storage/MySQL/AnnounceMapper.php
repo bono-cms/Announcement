@@ -135,14 +135,21 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public function fetchAll($page, $itemsPerPage, $published, $categoryId)
     {
-        $db = $this->db->select($this->getSharedColumns(false))
+        $columns = array_merge(
+            $this->getSharedColumns(false), 
+            array(CategoryMapper::getFullColumnName('name') => 'category')
+        );
+
+        $db = $this->db->select($columns)
                        ->from(self::getTableName())
+                       // Translation relation
                        ->innerJoin(self::getTranslationTable())
                        ->on()
                        ->equals(
                             self::getFullColumnName('id'), 
                             new RawSqlFragment(self::getFullColumnName('id', self::getTranslationTable()))
                         )
+                        // Web page relation
                         ->innerJoin(WebPageMapper::getTableName())
                         ->on()
                         ->equals(
@@ -153,6 +160,13 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
                         ->equals(
                             WebPageMapper::getFullColumnName('lang_id'),
                             new RawSqlFragment(self::getFullColumnName('lang_id', self::getTranslationTable()))
+                        )
+                        // Category relation
+                        ->innerJoin(CategoryMapper::getTableName())
+                        ->on()
+                        ->equals(
+                            CategoryMapper::getFullColumnName('id'),
+                            new RawSqlFragment(self::getFullColumnName('category_id'))
                         );
 
         $db->whereEquals(self::getFullColumnName('lang_id', self::getTranslationTable()), $this->getLangId());

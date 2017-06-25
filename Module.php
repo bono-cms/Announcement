@@ -30,8 +30,7 @@ final class Module extends AbstractCmsModule
         $webPageManager = $this->getWebPageManager();
         $historyManager = $this->getHistoryManager();
 
-        $announceManager = new AnnounceManager($announceMapper, $categoryMapper, $webPageManager, $historyManager);
-
+        $announceManager = new AnnounceManager($announceMapper, $webPageManager, $historyManager);
         $siteService = new SiteService($announceManager, $categoryMapper);
 
         return array(
