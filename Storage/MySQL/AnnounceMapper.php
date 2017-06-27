@@ -99,29 +99,7 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public function fetchById($id, $withTranslations)
     {
-        $db = $this->db->select($this->getSharedColumns(true))
-                       ->from(self::getTableName())
-                       ->innerJoin(self::getTranslationTable())
-                       ->on()
-                       ->equals(
-                            self::getFullColumnName('id'), 
-                            new RawSqlFragment(self::getFullColumnName('id', self::getTranslationTable()))
-                        )
-                        ->innerJoin(WebPageMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            WebPageMapper::getFullColumnName('id'),
-                            new RawSqlFragment(self::getFullColumnName('web_page_id', self::getTranslationTable()))
-                        );
-
-        $db->whereEquals(self::getFullColumnName('id'), $id);
-
-        if ($withTranslations === true) {
-            return $db->queryAll();
-        } else {
-            return $db->andWhereEquals(self::getFullColumnName('lang_id', self::getTranslationTable()), $this->getLangId())
-                      ->query();
-        }
+        return $this->findWebPage($this->getSharedColumns(true), $id, $withTranslations);
     }
 
     /**
@@ -140,36 +118,15 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
             array(CategoryMapper::getFullColumnName('name') => 'category')
         );
 
-        $db = $this->db->select($columns)
-                       ->from(self::getTableName())
-                       // Translation relation
-                       ->innerJoin(self::getTranslationTable())
-                       ->on()
-                       ->equals(
-                            self::getFullColumnName('id'), 
-                            new RawSqlFragment(self::getFullColumnName('id', self::getTranslationTable()))
-                        )
-                        // Web page relation
-                        ->innerJoin(WebPageMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            WebPageMapper::getFullColumnName('id'),
-                            new RawSqlFragment(self::getFullColumnName('web_page_id', self::getTranslationTable()))
-                        )
-                        ->rawAnd()
-                        ->equals(
-                            WebPageMapper::getFullColumnName('lang_id'),
-                            new RawSqlFragment(self::getFullColumnName('lang_id', self::getTranslationTable()))
-                        )
-                        // Category relation
-                        ->innerJoin(CategoryMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            CategoryMapper::getFullColumnName('id'),
-                            new RawSqlFragment(self::getFullColumnName('category_id'))
-                        );
-
-        $db->whereEquals(self::getFullColumnName('lang_id', self::getTranslationTable()), $this->getLangId());
+        $db = $this->createWebPageSelect($columns)
+                    // Category relation
+                    ->innerJoin(CategoryMapper::getTableName())
+                    ->on()
+                    ->equals(
+                        CategoryMapper::getFullColumnName('id'),
+                        new RawSqlFragment(self::getFullColumnName('category_id'))
+                    )
+                    ->whereEquals(self::getFullColumnName('lang_id', self::getTranslationTable()), $this->getLangId());
 
         if ($categoryId !== null) {
             $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);
