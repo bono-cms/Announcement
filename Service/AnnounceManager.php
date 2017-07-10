@@ -120,13 +120,13 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
             ->setOrder($announce['order'], VirtualEntity::FILTER_INT)
             ->setSeo($announce['seo'], VirtualEntity::FILTER_BOOL)
             ->setSlug($announce['slug'], VirtualEntity::FILTER_HTML)
+            ->setIcon($announce['icon'], VirtualEntity::FILTER_HTML)
+            ->setIntro($announce['intro'], VirtualEntity::FILTER_SAFE_TAGS)
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()));
 
         if ($full === true) {
             $entity->setTitle($announce['title'], VirtualEntity::FILTER_HTML)
-                   ->setIntro($announce['intro'], VirtualEntity::FILTER_SAFE_TAGS)
                    ->setFull($announce['full'], VirtualEntity::FILTER_SAFE_TAGS)
-                   ->setIcon($announce['icon'], VirtualEntity::FILTER_HTML)
                    ->setKeywords($announce['keywords'], VirtualEntity::FILTER_HTML)
                    ->setMetaDescription($announce['meta_description'], VirtualEntity::FILTER_HTML)
                    ->setPermanentUrl('/module/announcement/'.$entity->getId());

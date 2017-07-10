@@ -50,15 +50,15 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
             self::getFullColumnName('order'),
             self::getFullColumnName('published'),
             self::getFullColumnName('seo'),
+            self::getFullColumnName('icon'),
+            self::getFullColumnName('intro', self::getTranslationTable()),
             WebPageMapper::getFullColumnName('slug'),
             self::getFullColumnName('name', self::getTranslationTable()),
         );
 
         if ($all === true) {
             $columns = array_merge($columns, array(
-                self::getFullColumnName('icon'),
                 self::getFullColumnName('title', self::getTranslationTable()),
-                self::getFullColumnName('intro', self::getTranslationTable()),
                 self::getFullColumnName('full', self::getTranslationTable()),
                 self::getFullColumnName('keywords', self::getTranslationTable()),
                 self::getFullColumnName('meta_description', self::getTranslationTable()),
@@ -134,7 +134,7 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
 
         if ($published === true) {
             $db->andWhereEquals(self::getFullColumnName('published'), '1')
-               ->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'));
+               ->orderBy(new RawSqlFragment(sprintf('`order`, CASE WHEN `order` = 0 THEN %s END DESC', self::getFullColumnName('id'))));
         } else {
             $db->orderBy(self::getFullColumnName('id'))
                ->desc();
