@@ -11,19 +11,15 @@
 
 namespace Announcement\Storage\MySQL;
 
-use Cms\Storage\MySQL\AbstractStorageDropper;
+use Cms\Storage\MySQL\AbstractMapper;
 
-final class Dropper extends AbstractStorageDropper
+final class AnnounceTranslationMapper extends AbstractMapper
 {
     /**
      * {@inheritDoc}
      */
-    protected function getTables()
+    public static function getTableName()
     {
-        return array(
-            AnnounceMapper::getTableName(),
-            AnnounceTranslationMapper::getTableName(),
-            CategoryMapper::getTableName()
-        );
+        return self::getWithPrefix('bono_module_announcement_announces_translations');
     }
 }

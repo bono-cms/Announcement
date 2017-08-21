@@ -31,7 +31,7 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
      */
     public static function getTranslationTable()
     {
-        return self::getWithPrefix('bono_module_announcement_announces_translations');
+        return AnnounceTranslationMapper::getTableName();
     }
 
     /**
@@ -44,24 +44,24 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     {
         $columns = array(
             self::getFullColumnName('id'),
-            self::getFullColumnName('lang_id', self::getTranslationTable()),
-            self::getFullColumnName('web_page_id', self::getTranslationTable()),
+            AnnounceTranslationMapper::getFullColumnName('lang_id'),
+            AnnounceTranslationMapper::getFullColumnName('web_page_id'),
             self::getFullColumnName('category_id'),
             self::getFullColumnName('order'),
             self::getFullColumnName('published'),
             self::getFullColumnName('seo'),
             self::getFullColumnName('icon'),
-            self::getFullColumnName('intro', self::getTranslationTable()),
-            WebPageMapper::getFullColumnName('slug'),
-            self::getFullColumnName('name', self::getTranslationTable()),
+            AnnounceTranslationMapper::getFullColumnName('intro'),
+            AnnounceTranslationMapper::getFullColumnName('name'),
+            WebPageMapper::getFullColumnName('slug')
         );
 
         if ($all === true) {
             $columns = array_merge($columns, array(
-                self::getFullColumnName('title', self::getTranslationTable()),
-                self::getFullColumnName('full', self::getTranslationTable()),
-                self::getFullColumnName('keywords', self::getTranslationTable()),
-                self::getFullColumnName('meta_description', self::getTranslationTable()),
+                AnnounceTranslationMapper::getFullColumnName('title'),
+                AnnounceTranslationMapper::getFullColumnName('full'),
+                AnnounceTranslationMapper::getFullColumnName('keywords'),
+                AnnounceTranslationMapper::getFullColumnName('meta_description')
             ));
         }
 
@@ -126,7 +126,7 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
                         CategoryMapper::getFullColumnName('id'),
                         new RawSqlFragment(self::getFullColumnName('category_id'))
                     )
-                    ->whereEquals(self::getFullColumnName('lang_id', self::getTranslationTable()), $this->getLangId());
+                    ->whereEquals(AnnounceTranslationMapper::getFullColumnName('lang_id'), $this->getLangId());
 
         if ($categoryId !== null) {
             $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);
