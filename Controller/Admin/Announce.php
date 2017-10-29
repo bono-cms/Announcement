@@ -36,7 +36,6 @@ final class Announce extends AbstractController
 
         return $this->view->render('announce.form', array(
             'announce' => $announce,
-            'new' => is_object($announce),
             'categories' => $this->getModuleService('categoryManager')->fetchList()
         ));
     }
