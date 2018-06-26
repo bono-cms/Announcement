@@ -120,12 +120,9 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
 
         $db = $this->createWebPageSelect($columns)
                     // Category relation
-                    ->innerJoin(CategoryMapper::getTableName())
-                    ->on()
-                    ->equals(
-                        CategoryMapper::column('id'),
-                        new RawSqlFragment(self::column('category_id'))
-                    )
+                    ->innerJoin(CategoryMapper::getTableName(), array(
+                        CategoryMapper::column('id') => self::getRawColumn('category_id')
+                    ))
                     ->whereEquals(AnnounceTranslationMapper::column('lang_id'), $this->getLangId());
 
         if ($categoryId !== null) {
