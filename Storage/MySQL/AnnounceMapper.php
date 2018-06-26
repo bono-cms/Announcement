@@ -43,25 +43,25 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     private function getSharedColumns($all)
     {
         $columns = array(
-            self::getFullColumnName('id'),
-            AnnounceTranslationMapper::getFullColumnName('lang_id'),
-            AnnounceTranslationMapper::getFullColumnName('web_page_id'),
-            self::getFullColumnName('category_id'),
-            self::getFullColumnName('order'),
-            self::getFullColumnName('published'),
-            self::getFullColumnName('seo'),
-            self::getFullColumnName('icon'),
-            AnnounceTranslationMapper::getFullColumnName('intro'),
-            AnnounceTranslationMapper::getFullColumnName('name'),
-            WebPageMapper::getFullColumnName('slug')
+            self::column('id'),
+            AnnounceTranslationMapper::column('lang_id'),
+            AnnounceTranslationMapper::column('web_page_id'),
+            self::column('category_id'),
+            self::column('order'),
+            self::column('published'),
+            self::column('seo'),
+            self::column('icon'),
+            AnnounceTranslationMapper::column('intro'),
+            AnnounceTranslationMapper::column('name'),
+            WebPageMapper::column('slug')
         );
 
         if ($all === true) {
             $columns = array_merge($columns, array(
-                AnnounceTranslationMapper::getFullColumnName('title'),
-                AnnounceTranslationMapper::getFullColumnName('full'),
-                AnnounceTranslationMapper::getFullColumnName('keywords'),
-                AnnounceTranslationMapper::getFullColumnName('meta_description')
+                AnnounceTranslationMapper::column('title'),
+                AnnounceTranslationMapper::column('full'),
+                AnnounceTranslationMapper::column('keywords'),
+                AnnounceTranslationMapper::column('meta_description')
             ));
         }
 
@@ -115,7 +115,7 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
     {
         $columns = array_merge(
             $this->getSharedColumns(false), 
-            array(CategoryMapper::getFullColumnName('name') => 'category')
+            array(CategoryMapper::column('name') => 'category')
         );
 
         $db = $this->createWebPageSelect($columns)
@@ -123,20 +123,20 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
                     ->innerJoin(CategoryMapper::getTableName())
                     ->on()
                     ->equals(
-                        CategoryMapper::getFullColumnName('id'),
-                        new RawSqlFragment(self::getFullColumnName('category_id'))
+                        CategoryMapper::column('id'),
+                        new RawSqlFragment(self::column('category_id'))
                     )
-                    ->whereEquals(AnnounceTranslationMapper::getFullColumnName('lang_id'), $this->getLangId());
+                    ->whereEquals(AnnounceTranslationMapper::column('lang_id'), $this->getLangId());
 
         if ($categoryId !== null) {
-            $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);
+            $db->andWhereEquals(self::column('category_id'), $categoryId);
         }
 
         if ($published === true) {
-            $db->andWhereEquals(self::getFullColumnName('published'), '1')
-               ->orderBy(new RawSqlFragment(sprintf('`order`, CASE WHEN `order` = 0 THEN %s END DESC', self::getFullColumnName('id'))));
+            $db->andWhereEquals(self::column('published'), '1')
+               ->orderBy(new RawSqlFragment(sprintf('`order`, CASE WHEN `order` = 0 THEN %s END DESC', self::column('id'))));
         } else {
-            $db->orderBy(self::getFullColumnName('id'))
+            $db->orderBy(self::column('id'))
                ->desc();
         }
 

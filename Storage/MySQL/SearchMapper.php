@@ -23,12 +23,12 @@ final class SearchMapper extends AbstractMapper
     {
         // Columns to be selected
         $columns = array(
-            AnnounceMapper::getFullColumnName('id'),
-            AnnounceTranslationMapper::getFullColumnName('web_page_id'),
-            AnnounceTranslationMapper::getFullColumnName('lang_id'),
-            AnnounceTranslationMapper::getFullColumnName('title'),
-            AnnounceTranslationMapper::getFullColumnName('full') => 'content',
-            AnnounceTranslationMapper::getFullColumnName('name')
+            AnnounceMapper::column('id'),
+            AnnounceTranslationMapper::column('web_page_id'),
+            AnnounceTranslationMapper::column('lang_id'),
+            AnnounceTranslationMapper::column('title'),
+            AnnounceTranslationMapper::column('full') => 'content',
+            AnnounceTranslationMapper::column('name')
         );
 
         $queryBuilder->select($columns)
@@ -37,14 +37,14 @@ final class SearchMapper extends AbstractMapper
                      ->innerJoin(AnnounceTranslationMapper::getTableName())
                      ->on()
                      ->equals(
-                        AnnounceMapper::getFullColumnName('id'),
-                        AnnounceTranslationMapper::getFullColumnName('id')
+                        AnnounceMapper::column('id'),
+                        AnnounceTranslationMapper::column('id')
                      )
                      // Constraints
-                     ->whereEquals(AnnounceTranslationMapper::getFullColumnName('lang_id'), "'{$this->getLangId()}'")
-                     ->andWhereEquals(AnnounceMapper::getFullColumnName('published'), '1')
+                     ->whereEquals(AnnounceTranslationMapper::column('lang_id'), "'{$this->getLangId()}'")
+                     ->andWhereEquals(AnnounceMapper::column('published'), '1')
                      // Search
-                     ->andWhereLike(AnnounceTranslationMapper::getFullColumnName('name'), $placeholder)
-                     ->orWhereLike(AnnounceTranslationMapper::getFullColumnName('full'), $placeholder);
+                     ->andWhereLike(AnnounceTranslationMapper::column('name'), $placeholder)
+                     ->orWhereLike(AnnounceTranslationMapper::column('full'), $placeholder);
     }
 }
