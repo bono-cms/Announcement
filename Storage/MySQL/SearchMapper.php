@@ -35,7 +35,7 @@ final class SearchMapper extends AbstractMapper
                      ->from(AnnounceMapper::getTableName())
                      // Translation relation
                      ->innerJoin(AnnounceTranslationMapper::getTableName(), array(
-                        AnnounceMapper::column('id') => AnnounceTranslationMapper::getRawColumn('id')
+                        AnnounceMapper::column('id') => AnnounceTranslationMapper::column('id')
                      ))
                      // Constraints
                      ->whereEquals(AnnounceTranslationMapper::column('lang_id'), "'{$this->getLangId()}'")
