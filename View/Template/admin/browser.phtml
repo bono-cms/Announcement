@@ -40,56 +40,70 @@ defined('KRYSTAL') or die;
 
         <form>
             <div class="table-responsive">
-                <table class="table table-hover table-bordered table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                <?php if (!empty($announces)): ?>
-                                <input type="checkbox" />
-                                <?php endif; ?>
-                            </th>
-                            <th class="text-center"><?php $this->show('#'); ?></th>
-                            <th class="text-center"><?php $this->show('Name'); ?></th>
-                            <th class="text-center"><?php $this->show('Category'); ?></th>
-                            <th class="text-center"><?php $this->show('Order'); ?></th>
-                            <th class="text-center"><?php $this->show('Published'); ?></th>
-                            <th class="text-center"><?php $this->show('SEO'); ?></th>
-                            <th class="text-center"><?php $this->show('Actions'); ?></th>
-                        </tr>
-                    </thead>
-                    
-                    <?php if (!empty($announces)): ?>
-                    <tbody>
-                        <?php foreach ($announces as $announce): ?>
-                        <tr>
-                            <td class="text-center">
-                                <input type="checkbox" name="toDelete[<?php echo $announce->getId(); ?>]" />
-                            </td>
-                            <td class="text-center text-muted"><?php echo $announce->getId(); ?></td>
-                            <td class="text-center"><?php echo $announce->getName(); ?></td>
-                            <td class="text-center"><?php echo $announce->getCategoryName(); ?></td>
-                            <td class="col-lg-1">
-                                <?php echo Element::number(sprintf('order[%s]', $announce->getId()), $announce->getOrder(), array('class' => 'form-control', 'min' => '0')); ?>
-                            </td>
-                            <td class="text-center">
-                                <?php echo Element::checkbox(sprintf('published[%s]', $announce->getId()), $announce->getPublished()); ?>
-                            </td>
-                            <td class="text-center">
-                                <?php echo Element::checkbox(sprintf('seo[%s]', $announce->getId()), $announce->getSeo()); ?>
-                            </td>
-                            <td class="text-center">
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this announce'); ?>" data-button="view" href="<?php echo $announce->getUrl(); ?>" target="_blank" ><i class="glyphicon glyphicon-search"></i></a>
-                                <a data-button="edit" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this announce'); ?>" href="<?php echo $this->url('Announcement:Admin:Announce@editAction', $announce->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a data-button="delete" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this announce'); ?>" data-url="<?php echo $this->url('Announcement:Admin:Announce@deleteAction', $announce->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                            </td>
-                        </tr>
-                        
-                        <?php endforeach; ?>
-                    </tbody>
-                    <?php endif; ?>
-                    
-                </table>
-                
+                <?= Grid::render($announces, array(
+                    'pk' => 'id',
+                    'batch' => true,
+                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                    'columns' => array(
+                        array(
+                            'column' => 'id',
+                            'label' => '#'
+                        ),
+
+                        array(
+                            'column' => 'name'
+                        ),
+
+                        array(
+                            'column' => 'category_name',
+                            'label' => 'Category'
+                        ),
+
+                        array(
+                            'column' => 'order',
+                            'value' => function($row){
+                                return Element::number(sprintf('order[%s]', $row['id']), $row['order'], array('class' => 'form-control', 'min' => '0'));
+                            }
+                        ),
+
+                        array(
+                            'column' => 'published',
+                            'value' => function($row){
+                                return Element::checkbox(sprintf('published[%s]', $row['id']), $row['published']);
+                            }
+                        ),
+
+                        array(
+                            'column' => 'seo',
+                            'label' => 'SEO',
+                            'value' => function($row){
+                                return Element::checkbox(sprintf('seo[%s]', $row['id']), $row['seo']);
+                            }
+                        )
+                    ),
+
+                    'actions' => array(
+                        'view' => function($row){
+                            return Icon::view($row['url'], $this->translate('View this announce'));
+                        },
+
+                        'edit' => function($row){
+                            return Icon::edit(
+                                $this->url('Announcement:Admin:Announce@editAction', $row['id']),
+                                $this->translate('Edit this announce')
+                            );
+                        },
+
+                        'remove' => function($row){
+                            return Icon::remove(
+                                $this->url('Announcement:Admin:Announce@deleteAction', $row['id']), 
+                                $this->translate('Remove this announce')
+                            );
+                        }
+                    )
+
+                ), $this->translator); ?>                
+
                 <?php if (empty($announces)): ?>
                 <div class="center-block">
                     <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No announces'); ?></h2>
