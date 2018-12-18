@@ -1,6 +1,9 @@
 <?php
 
 use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+use Cms\View\Icon;
+
 defined('KRYSTAL') or die;
 
 ?>
@@ -102,45 +105,48 @@ defined('KRYSTAL') or die;
         <div class="table-responsive">
             <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
-            <table class="table table-hover table-bordered table-striped table-condensed">
-                <thead>
-                    <tr>
-                        <th class="text-center"><?php $this->show('#'); ?></th>
-                        <th class="text-center"><?php $this->show('Name'); ?></th>
-                        
-                        <?php if ($extendedMode): ?>
-                        <th class="text-center"><?php $this->show('Class'); ?></th>
-                        <th class="text-center"><?php $this->show('Actions'); ?></th>
-                        <?php endif; ?>
-                    </tr>
-                </thead>
+            <?= Grid::render($categories, array(
+                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                'rowAttributes' => array(
+                    'class' => function($row) use ($categoryId){
+                        return $row['id'] == $categoryId ? 'info' : null;
+                    }
+                ),
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
 
-                <?php if (!empty($categories)): ?>
-                <tbody>
-                    <?php foreach ($categories as $category): ?>
-                    <tr>
-                        <td class="text-center text-muted"><?php echo $category->getId(); ?></td>
-                        <td class="text-center">
-                            <a href="<?php echo $this->url('Announcement:Admin:Browser@categoryAction', $category->getId()); ?>">
-                                <?php if (isset($categoryId) && $categoryId == $category->getId()): ?>
-                                <strong><?php echo $category->getName(); ?></strong>
-                                <?php else: ?>
-                                <?php echo $category->getName(); ?>
-                                <?php endif; ?>
-                            </a>
-                        </td>
-                        <?php if ($extendedMode): ?>
-                        <td class="text-center"><?php echo $category->getClass(); ?></td>
-                        <td class="text-center">
-                            <a data-toggle="tooltip" data-placement="left" data-button="edit" data-original-title="<?php $this->show('Edit this category'); ?>" href="<?php echo $this->url('Announcement:Admin:Category@editAction', $category->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a data-toggle="tooltip" data-placement="left" data-button="delete" data-original-title="<?php $this->show('Remove this category'); ?>" data-url="<?php echo $this->url('Announcement:Admin:Category@deleteAction', $category->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                        </td>
-                        <?php endif; ?>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                <?php endif; ?>
-            </table>
+                    array(
+                        'column' => 'name',
+                        'value' => function($row){
+                            return Element::link($row['name'], $this->url('Announcement:Admin:Browser@categoryAction', $row['id']));
+                        }
+                    ),
+
+                    array(
+                        'column' => 'class'
+                    )
+                ),
+
+                'actions' => array(
+                    'edit' => function($row){
+                        return Icon::edit(
+                            $this->url('Announcement:Admin:Category@editAction', $row['id']),
+                            $this->translate('Edit this category')
+                        );
+                    },
+
+                    'remove' => function($row){
+                        return Icon::remove(
+                            $this->url('Announcement:Admin:Category@deleteAction', $row['id']),
+                            $this->translate('Remove this category')
+                        );
+                    }
+                )
+
+            ), $this->translator); ?>
 
             <?php if (empty($categories)): ?>
             <div class="center-block">

@@ -48,6 +48,7 @@ final class Browser extends AbstractController
         return $this->createGrid(array(
             'announces' => $this->getModuleService('announceManager')->fetchAll($page, $this->getSharedPerPageCount(), false),
             'paginator' => $paginator,
+            'categoryId' => null
         ));
     }
 
