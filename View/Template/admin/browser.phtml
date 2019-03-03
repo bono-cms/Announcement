@@ -1,7 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Widget\GridWidget;
+use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -40,7 +40,7 @@ defined('KRYSTAL') or die;
 
         <form>
             <div class="table-responsive">
-                <?= $this->widget(new GridWidget($announces, array(
+                <?= $this->widget(new GridViewWidget($announces, array(
                     'pk' => 'id',
                     'batch' => true,
                     'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
@@ -119,7 +119,7 @@ defined('KRYSTAL') or die;
         <div class="table-responsive">
             <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
-            <?= $this->widget(new GridWidget($categories, array(
+            <?= $this->widget(new GridViewWidget($categories, array(
                 'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
                 'rowAttributes' => array(
                     'class' => function($row) use ($categoryId){
