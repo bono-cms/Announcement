@@ -9,7 +9,7 @@ return array(
     'description' => 'Announcement module allows you to show different marketing announces on your site',
     'menu' => array(
         'name'  => 'Announcement',
-        'icon' => '',
+        'icon' => 'fas fa-scroll',
         'items' => array(
             array(
                 'route' => 'Announcement:Admin:Browser@indexAction',
