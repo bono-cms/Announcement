@@ -8,124 +8,40 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<div class="btn-toolbar">
-	<div class="btn-group">
-	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-		<i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?> <span class="caret"></span>
-	  </button>
-	  <ul class="dropdown-menu">
-		 <li><a href="<?php echo $this->url('Announcement:Admin:Announce@addAction'); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new announce'); ?></a></li>
-		 
-		 <?php if ($extendedMode): ?>
-		 <li><a href="<?php echo $this->url('Announcement:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add a category'); ?></a></li>
-		 <?php endif; ?>
-		 
-		 <li class="divider"></li>
-		 <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
-		 <?php if (!empty($announces)): ?>
-		 <li><a data-button="save-changes" data-url="<?php echo $this->url('Announcement:Admin:Browser@tweakAction'); ?>" href="#"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-		 <li><a data-button="remove-selected" data-url="<?php echo $this->url('Announcement:Admin:Announce@deleteAction', null); ?>" href="#"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-		 <?php else: ?>
-		 <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-		 <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-		 
-		 <?php endif; ?>
-	  </ul>
-	</div>
-</div>
+<div class="card">
+    <div class="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?>
+      </button>
 
-<div class="row">
-    <div class="col-lg-8">
-        <?php $this->loadPartial('items-per-page', array('caption' => 'Announcements')); ?>
+      <div class="dropdown-menu">
+         <a class="dropdown-item" href="<?php echo $this->url('Announcement:Admin:Announce@addAction'); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new announce'); ?></a>
 
-        <form>
-            <div class="table-responsive">
-                <?= $this->widget(new GridViewWidget($announces, array(
-                    'pk' => 'id',
-                    'batch' => true,
-                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-                    'columns' => array(
-                        array(
-                            'column' => 'id',
-                            'label' => '#'
-                        ),
+         <?php if ($extendedMode): ?>
+         <a class="dropdown-item" href="<?php echo $this->url('Announcement:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add a category'); ?></a>
+         <?php endif; ?>
 
-                        array(
-                            'column' => 'name'
-                        ),
+         <div class="dropdown-divider"></div>
+         <div class="dropdown-header"><?php $this->show('Actions'); ?></div>
 
-                        array(
-                            'column' => 'category_name',
-                            'label' => 'Category'
-                        ),
-
-                        array(
-                            'column' => 'order',
-                            'value' => function($row){
-                                return Element::number(sprintf('order[%s]', $row['id']), $row['order'], array('class' => 'form-control', 'min' => '0'));
-                            }
-                        ),
-
-                        array(
-                            'column' => 'published',
-                            'value' => function($row){
-                                return Element::checkbox(sprintf('published[%s]', $row['id']), $row['published']);
-                            }
-                        ),
-
-                        array(
-                            'column' => 'seo',
-                            'label' => 'SEO',
-                            'value' => function($row){
-                                return Element::checkbox(sprintf('seo[%s]', $row['id']), $row['seo']);
-                            }
-                        )
-                    ),
-
-                    'actions' => array(
-                        'view' => function($row){
-                            return Icon::view($row['url'], $this->translate('View this announce'));
-                        },
-
-                        'edit' => function($row){
-                            return Icon::edit(
-                                $this->url('Announcement:Admin:Announce@editAction', $row['id']),
-                                $this->translate('Edit this announce')
-                            );
-                        },
-
-                        'remove' => function($row){
-                            return Icon::remove(
-                                $this->url('Announcement:Admin:Announce@deleteAction', $row['id']), 
-                                $this->translate('Remove this announce')
-                            );
-                        }
-                    )
-
-                ))); ?>
-
-                <?php if (empty($announces)): ?>
-                <div class="center-block">
-                    <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No announces'); ?></h2>
-                </div>
-                <?php endif; ?>
-            </div>
-        </form>
-
-        <?php $this->loadPartial('paginator'); ?>
+         <?php if (!empty($announces)): ?>
+         <a class="dropdown-item" data-button="save-changes" data-url="<?php echo $this->url('Announcement:Admin:Browser@tweakAction'); ?>" href="#"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a>
+         <a class="dropdown-item" data-button="remove-selected" data-url="<?php echo $this->url('Announcement:Admin:Announce@deleteAction', null); ?>" href="#"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+         <?php else: ?>
+         <a class="dropdown-item disabled"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a>
+         <a class="dropdown-item disabled"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+         <?php endif; ?>
+      </div>
     </div>
 
-    <div class="col-lg-4">
-        <div class="table-responsive">
-            <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
+    <?php $this->loadPartial('items-per-page', array('caption' => 'Announcements')); ?>
 
-            <?= $this->widget(new GridViewWidget($categories, array(
-                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-                'rowAttributes' => array(
-                    'class' => function($row) use ($categoryId){
-                        return $row['id'] == $categoryId ? 'info' : null;
-                    }
-                ),
+    <form>
+        <div class="table-responsive">
+            <?= $this->widget(new GridViewWidget($announces, array(
+                'pk' => 'id',
+                'batch' => true,
+                'tableClass' => 'table table-hover table-bordered table-striped',
                 'columns' => array(
                     array(
                         'column' => 'id',
@@ -133,39 +49,120 @@ defined('KRYSTAL') or die;
                     ),
 
                     array(
-                        'column' => 'name',
+                        'column' => 'name'
+                    ),
+
+                    array(
+                        'column' => 'category_name',
+                        'label' => 'Category'
+                    ),
+
+                    array(
+                        'column' => 'order',
                         'value' => function($row){
-                            return Element::link($row['name'], $this->url('Announcement:Admin:Browser@categoryAction', $row['id']));
+                            return Element::number(sprintf('order[%s]', $row['id']), $row['order'], array('class' => 'form-control', 'min' => '0'));
                         }
                     ),
 
                     array(
-                        'column' => 'class'
+                        'column' => 'published',
+                        'value' => function($row){
+                            return Element::checkbox(sprintf('published[%s]', $row['id']), $row['published']);
+                        }
+                    ),
+
+                    array(
+                        'column' => 'seo',
+                        'label' => 'SEO',
+                        'value' => function($row){
+                            return Element::checkbox(sprintf('seo[%s]', $row['id']), $row['seo']);
+                        }
                     )
                 ),
 
                 'actions' => array(
+                    'view' => function($row){
+                        return Icon::view($row['url'], $this->translate('View this announce'));
+                    },
+
                     'edit' => function($row){
                         return Icon::edit(
-                            $this->url('Announcement:Admin:Category@editAction', $row['id']),
-                            $this->translate('Edit this category')
+                            $this->url('Announcement:Admin:Announce@editAction', $row['id']),
+                            $this->translate('Edit this announce')
                         );
                     },
 
                     'remove' => function($row){
                         return Icon::remove(
-                            $this->url('Announcement:Admin:Category@deleteAction', $row['id']),
-                            $this->translate('Remove this category')
+                            $this->url('Announcement:Admin:Announce@deleteAction', $row['id']), 
+                            $this->translate('Remove this announce')
                         );
                     }
                 )
+
             ))); ?>
 
-            <?php if (empty($categories)): ?>
+            <?php if (empty($announces)): ?>
             <div class="center-block">
-                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No announces'); ?></h2>
             </div>
             <?php endif; ?>
         </div>
+    </form>
+
+    <?php $this->loadPartial('paginator'); ?>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
+
+        <?= $this->widget(new GridViewWidget($categories, array(
+            'tableClass' => 'table table-hover table-bordered table-striped',
+            'rowAttributes' => array(
+                'class' => function($row) use ($categoryId){
+                    return $row['id'] == $categoryId ? 'table-info' : null;
+                }
+            ),
+            'columns' => array(
+                array(
+                    'column' => 'id',
+                    'label' => '#'
+                ),
+
+                array(
+                    'column' => 'name',
+                    'value' => function($row){
+                        return Element::link($row['name'], $this->url('Announcement:Admin:Browser@categoryAction', $row['id']));
+                    }
+                ),
+
+                array(
+                    'column' => 'class'
+                )
+            ),
+
+            'actions' => array(
+                'edit' => function($row){
+                    return Icon::edit(
+                        $this->url('Announcement:Admin:Category@editAction', $row['id']),
+                        $this->translate('Edit this category')
+                    );
+                },
+
+                'remove' => function($row){
+                    return Icon::remove(
+                        $this->url('Announcement:Admin:Category@deleteAction', $row['id']),
+                        $this->translate('Remove this category')
+                    );
+                }
+            )
+        ))); ?>
+
+        <?php if (empty($categories)): ?>
+        <div class="center-block">
+            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
+        </div>
+        <?php endif; ?>
     </div>
 </div>
