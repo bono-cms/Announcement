@@ -65,7 +65,8 @@ final class Announce extends AbstractController
         $announce = $this->getModuleService('announceManager')->fetchById($id, true);
 
         if (!empty($announce)) {
-            return $this->createForm($announce, 'Edit the announce');
+            $name = $this->getCurrentProperty($announce, 'name');
+            return $this->createForm($announce, $this->translator->translate('Edit the announce "%s"', $name));
         } else {
             return false;
         }
