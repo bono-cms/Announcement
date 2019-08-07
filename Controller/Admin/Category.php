@@ -56,7 +56,7 @@ final class Category extends AbstractController
         $category = $this->getModuleService('categoryManager')->fetchById($id);
 
         if ($category !== false) {
-            return $this->createForm($category, 'Edit the category');
+            return $this->createForm($category, $this->translator->translate('Edit the category "%s"', $category->getName()));
         } else {
             return false;
         }
