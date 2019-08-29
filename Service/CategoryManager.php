@@ -17,7 +17,7 @@ use Announcement\Storage\CategoryMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 
-final class CategoryManager extends AbstractManager implements CategoryManagerInterface
+final class CategoryManager extends AbstractManager
 {
     /**
      * Any-compliant announce mapper

@@ -13,12 +13,12 @@ namespace Announcement\Service;
 
 use Announcement\Storage\CategoryMapperInterface;
 
-final class SiteService implements SiteServiceInterface
+final class SiteService
 {
     /**
-     * Announce manager
+     * Announce service
      * 
-     * @var \Announcement\Service\AnnounceManagerInterface
+     * @var \Announcement\Service\AnnounceManager
      */
     private $announceManager;
 
@@ -32,11 +32,11 @@ final class SiteService implements SiteServiceInterface
     /**
      * State initialization
      * 
-     * @param \Announcement\Service\AnnounceManagerInterface $announceManager
+     * @param \Announcement\Service\AnnounceManager $announceManager
      * @param \Announcement\Storage\CategoryMapperInterface $categoryMapper
      * @return void
      */
-    public function __construct(AnnounceManagerInterface $announceManager, CategoryMapperInterface $categoryMapper)
+    public function __construct(AnnounceManager $announceManager, CategoryMapperInterface $categoryMapper)
     {
         $this->announceManager = $announceManager;
         $this->categoryMapper = $categoryMapper;
