@@ -53,7 +53,9 @@ final class AnnounceMapper extends AbstractMapper implements AnnounceMapperInter
             self::column('icon'),
             AnnounceTranslationMapper::column('intro'),
             AnnounceTranslationMapper::column('name'),
-            WebPageMapper::column('slug')
+            WebPageMapper::column('slug'),
+            WebPageMapper::column('changefreq'),
+            WebPageMapper::column('priority')
         );
 
         if ($all === true) {

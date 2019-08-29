@@ -122,7 +122,9 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
             ->setSlug($announce['slug'], VirtualEntity::FILTER_HTML)
             ->setIcon($announce['icon'], VirtualEntity::FILTER_HTML)
             ->setIntro($announce['intro'], VirtualEntity::FILTER_SAFE_TAGS)
-            ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()));
+            ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
+            ->setChangeFreq($announce['changefreq'])
+            ->setPriority($announce['priority']);
 
         if ($full === true) {
             $entity->setTitle($announce['title'], VirtualEntity::FILTER_HTML)

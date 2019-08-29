@@ -47,9 +47,14 @@ final class Announce extends AbstractController
      */
     public function addAction()
     {
+        // CMS configuration object
+        $config = $this->getService('Cms', 'configManager')->getEntity();
+
         $announce = new VirtualEntity();
         $announce->setSeo(true)
-                 ->setPublished(true);
+                 ->setPublished(true)
+                 ->setChangeFreq($config->getSitemapFrequency())
+                 ->setPriority($config->getSitemapPriority());
 
         return $this->createForm($announce, 'Add new announce');
     }
