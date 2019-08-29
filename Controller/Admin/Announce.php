@@ -92,7 +92,7 @@ final class Announce extends AbstractController
         if ($this->request->hasPost('batch')) {
             $ids = array_keys($this->request->getPost('batch'));
 
-            $service->deleteByIds($ids);
+            $service->delete($ids);
             $this->flashBag->set('success', 'Selected elements have been removed successfully');
 
             // Save in the history
@@ -109,7 +109,7 @@ final class Announce extends AbstractController
             // Save in the history
             $historyService->write('Announcement', 'Announce "%s" has been removed', $announce->getName());
 
-            $service->deleteById($id);
+            $service->delete($id);
             $this->flashBag->set('success', 'Selected element has been removed successfully');
         }
 
@@ -144,21 +144,20 @@ final class Announce extends AbstractController
             // Current announce name
             $name = $this->getCurrentProperty($this->request->getPost('translation'), 'name');
 
-            if (!empty($input['id'])) {
-                if ($service->update($this->request->getPost())) {
-                    $this->flashBag->set('success', 'The element has been updated successfully');
+            // Save an announce
+            $service->save($this->request->getPost());
 
-                    $historyService->write('Announcement', 'Announce "%s" has been updated', $name);
-                    return '1';
-                }
+            if (!empty($input['id'])) {
+                $this->flashBag->set('success', 'The element has been updated successfully');
+
+                $historyService->write('Announcement', 'Announce "%s" has been updated', $name);
+                return '1';
 
             } else {
-                if ($service->add($this->request->getPost())) {
-                    $this->flashBag->set('success', 'The element has been created successfully');
+                $this->flashBag->set('success', 'The element has been created successfully');
 
-                    $historyService->write('Announcement', 'Announce "%s" has been added', $name);
-                    return $service->getLastId();
-                }
+                $historyService->write('Announcement', 'Announce "%s" has been added', $name);
+                return $service->getLastId();
             }
 
         } else {

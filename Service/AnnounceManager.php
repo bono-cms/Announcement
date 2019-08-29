@@ -14,9 +14,7 @@ namespace Announcement\Service;
 use Cms\Service\AbstractManager;
 use Cms\Service\WebPageManagerInterface;
 use Announcement\Storage\AnnounceMapperInterface;
-use Announcement\Storage\CategoryMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Stdlib\ArrayUtils;
 
 final class AnnounceManager extends AbstractManager
 {
@@ -45,37 +43,6 @@ final class AnnounceManager extends AbstractManager
     {
         $this->announceMapper = $announceMapper;
         $this->webPageManager = $webPageManager;
-    }
-
-    /**
-     * Update settings
-     * 
-     * @param array $settings
-     * @return boolean
-     */
-    public function updateSettings(array $settings)
-    {
-        return $this->announceMapper->updateSettings($settings);
-    }
-
-    /**
-     * Returns last announce id
-     * 
-     * @return integer
-     */
-    public function getLastId()
-    {
-        return $this->announceMapper->getLastId();
-    }
-
-    /**
-     * Returns prepared paginator's instance
-     * 
-     * @return \Krystal\Paginate\Paginator
-     */
-    public function getPaginator()
-    {
-        return $this->announceMapper->getPaginator();
     }
 
     /**
@@ -112,15 +79,57 @@ final class AnnounceManager extends AbstractManager
     }
 
     /**
-     * Saves a page
+     * Update settings
      * 
-     * @param array $input
+     * @param array $settings
      * @return boolean
      */
-    private function savePage(array $input)
+    public function updateSettings(array $settings)
+    {
+        return $this->announceMapper->updateSettings($settings);
+    }
+
+    /**
+     * Saves an announce
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function save(array $input)
     {
         $input['announce']['order'] = (int) $input['announce']['order'];
         return $this->announceMapper->savePage('Announcement', 'Announcement:Announce@indexAction', $input['announce'], $input['translation']);
+    }
+
+    /**
+     * Deletes an announce by its associated id
+     * 
+     * @param string|array $id Announce id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        return $this->announceMapper->deletePage($id);
+    }
+
+    /**
+     * Returns last announce id
+     * 
+     * @return integer
+     */
+    public function getLastId()
+    {
+        return $this->announceMapper->getLastId();
+    }
+
+    /**
+     * Returns prepared paginator's instance
+     * 
+     * @return \Krystal\Paginate\Paginator
+     */
+    public function getPaginator()
+    {
+        return $this->announceMapper->getPaginator();
     }
 
     /**
@@ -132,28 +141,6 @@ final class AnnounceManager extends AbstractManager
     public function getSwitchUrls($id)
     {
         return $this->announceMapper->createSwitchUrls($id, 'Announcement', 'Announcement:Announce@indexAction');
-    }
-
-    /**
-     * Adds an announce
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function add(array $input)
-    {
-        return $this->savePage($input);
-    }
-
-    /**
-     * Updates an announce
-     * 
-     * @param array $input Raw form data
-     * @return boolean
-     */
-    public function update(array $input)
-    {
-        return $this->savePage($input);
     }
 
     /**
@@ -184,27 +171,5 @@ final class AnnounceManager extends AbstractManager
     public function fetchAll($page, $itemsPerPage, $published, $categoryId = null)
     {
         return $this->prepareResults($this->announceMapper->fetchAll($page, $itemsPerPage, $published, $categoryId), false);
-    }
-
-    /**
-     * Deletes an announce by its associated id
-     * 
-     * @param string $id Announce id
-     * @return boolean
-     */
-    public function deleteById($id)
-    {
-        return $this->announceMapper->deletePage($id);
-    }
-
-    /**
-     * Delete announces by their associated ids
-     * 
-     * @param array $ids Array of announce ids
-     * @return boolean
-     */
-    public function deleteByIds(array $ids)
-    {
-        return $this->announceMapper->deletePage($ids);
     }
 }
