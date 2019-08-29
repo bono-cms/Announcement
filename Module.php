@@ -28,15 +28,14 @@ final class Module extends AbstractCmsModule
         $announceMapper = $this->getMapper('/Announcement/Storage/MySQL/AnnounceMapper');
 
         $webPageManager = $this->getWebPageManager();
-        $historyManager = $this->getHistoryManager();
 
-        $announceManager = new AnnounceManager($announceMapper, $webPageManager, $historyManager);
+        $announceManager = new AnnounceManager($announceMapper, $webPageManager);
         $siteService = new SiteService($announceManager, $categoryMapper);
 
         return array(
             'siteService' => $siteService,
             'announceManager' => $announceManager,
-            'categoryManager' => new CategoryManager($categoryMapper, $announceMapper, $historyManager)
+            'categoryManager' => new CategoryManager($categoryMapper, $announceMapper)
         );
     }
 }

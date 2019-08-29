@@ -85,6 +85,7 @@ final class Announce extends AbstractController
      */
     public function deleteAction($id)
     {
+        $historyService = $this->getService('Cms', 'historyManager');
         $service = $this->getModuleService('announceManager');
 
         // Batch removal
@@ -94,12 +95,20 @@ final class Announce extends AbstractController
             $service->deleteByIds($ids);
             $this->flashBag->set('success', 'Selected elements have been removed successfully');
 
+            // Save in the history
+            $historyService->write('Announcement', 'Batch removal of %s announces', count($ids));
+
         } else {
             $this->flashBag->set('warning', 'You should select at least one element to remove');
         }
 
         // Single removal
         if (!empty($id)) {
+
+            $announce = $this->getModuleService('announceManager')->fetchById($id, false);
+            // Save in the history
+            $historyService->write('Announcement', 'Announce "%s" has been removed', $announce->getName());
+
             $service->deleteById($id);
             $this->flashBag->set('success', 'Selected element has been removed successfully');
         }
@@ -130,16 +139,24 @@ final class Announce extends AbstractController
 
         if (1) {
             $service = $this->getModuleService('announceManager');
+            $historyService = $this->getService('Cms', 'historyManager');
+
+            // Current announce name
+            $name = $this->getCurrentProperty($this->request->getPost('translation'), 'name');
 
             if (!empty($input['id'])) {
                 if ($service->update($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
+
+                    $historyService->write('Announcement', 'Announce "%s" has been updated', $name);
                     return '1';
                 }
 
             } else {
                 if ($service->add($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
+
+                    $historyService->write('Announcement', 'Announce "%s" has been added', $name);
                     return $service->getLastId();
                 }
             }

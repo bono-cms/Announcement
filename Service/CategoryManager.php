@@ -12,12 +12,10 @@
 namespace Announcement\Service;
 
 use Cms\Service\AbstractManager;
-use Cms\Service\HistoryManagerInterface;
 use Announcement\Storage\AnnounceMapperInterface;
 use Announcement\Storage\CategoryMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
-use Krystal\Security\Filter;
 
 final class CategoryManager extends AbstractManager implements CategoryManagerInterface
 {
@@ -36,37 +34,16 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     private $categoryMapper;
 
     /**
-     * History manager to track activity
-     * 
-     * @var \Cms\Service\HistoryManagerInterface
-     */
-    private $historyManager;
-
-    /**
      * State initialization
      * 
      * @param \Announcement\Storage\CategoryMapperInterface $categoryMapper
      * @param \Announcement\Storage\AnnounceMapperInterface $announceMapper
-     * @param \Cms\Service\HistoryManagerInterface $historyManager
      * @return void
      */
-    public function __construct(CategoryMapperInterface $categoryMapper, AnnounceMapperInterface $announceMapper, HistoryManagerInterface $historyManager)
+    public function __construct(CategoryMapperInterface $categoryMapper, AnnounceMapperInterface $announceMapper)
     {
         $this->categoryMapper = $categoryMapper;
         $this->announceMapper = $announceMapper;
-        $this->historyManager = $historyManager;
-    }
-
-    /**
-     * Tracks activity
-     * 
-     * @param string $message
-     * @pram string $placeholder
-     * @return boolean
-     */
-    private function track($message, $placeholder)
-    {
-        return $this->historyManager->write('Announcement', $message, $placeholder);
     }
 
     /**
@@ -76,8 +53,8 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     {
         $entity = new VirtualEntity();
         $entity->setId($category['id'], VirtualEntity::FILTER_INT)
-            ->setName($category['name'], VirtualEntity::FILTER_HTML)
-            ->setClass($category['class'], VirtualEntity::FILTER_HTML);
+               ->setName($category['name'], VirtualEntity::FILTER_HTML)
+               ->setClass($category['class'], VirtualEntity::FILTER_HTML);
 
         return $entity;
     }
@@ -131,15 +108,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function deleteById($id)
     {
-        // Grab category's name before we remove it
-        $name = Filter::escape($this->categoryMapper->fetchNameById($id));
-
-        if ($this->categoryMapper->deleteById($id) && $this->announceMapper->deleteAllByCategoryId($id)) {
-            $this->track('Category "%s" has been removed', $name);
-            return true;
-        } else {
-            return false;
-        }
+        return $this->categoryMapper->deleteById($id) && $this->announceMapper->deleteAllByCategoryId($id);
     }
 
     /**
@@ -150,12 +119,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function update(array $input)
     {
-        if ($this->categoryMapper->update($input['id'], $input['name'], $input['class'])) {
-            $this->track('Category "%s" has been updated', $input['name']);
-            return true;
-        } else {
-            return false;
-        }
+        return $this->categoryMapper->update($input['id'], $input['name'], $input['class']);
     }
 
     /**
@@ -166,7 +130,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function add(array $input)
     {
-        $this->track('Category "%s" has been added', $input['name']);
         return $this->categoryMapper->insert($input['name'], $input['class']);
     }
 }

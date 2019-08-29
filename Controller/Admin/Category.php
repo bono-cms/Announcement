@@ -70,10 +70,17 @@ final class Category extends AbstractController
      */
     public function deleteAction($id)
     {
-        $service = $this->getModuleService('categoryManager');
-        $service->deleteById($id);
+        $category = $this->getModuleService('categoryManager')->fetchById($id);
 
-        $this->flashBag->set('success', 'Selected element has been removed successfully');
+        if ($category !== false) {
+            $service = $this->getModuleService('categoryManager');
+            $service->deleteById($id);
+
+            // Save in the history
+            $this->getService('Cms', 'historyManager')->write('Announcement', 'Category "%s" has been removed', $category->getName());
+
+            $this->flashBag->set('success', 'Selected element has been removed successfully');
+        }
 
         return '1';
     }
@@ -97,12 +104,15 @@ final class Category extends AbstractController
         ));
 
         if ($formValidator->isValid()) {
+            $historyService = $this->getService('Cms', 'historyManager');
             $service = $this->getModuleService('categoryManager');
 
             // Update
             if (!empty($input['id'])) {
                 if ($service->update($input)) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
+
+                    $historyService->write('Announcement', 'Category "%s" has been updated', $input['name']);
                     return '1';
                 }
 
@@ -110,6 +120,8 @@ final class Category extends AbstractController
                 // Create
                 if ($service->add($input)) {
                     $this->flashBag->set('success', 'The element has been created successfully');
+
+                    $historyService->write('Announcement', 'Category "%s" has been added', $input['name']);
                     return $service->getLastId();
                 }
             }

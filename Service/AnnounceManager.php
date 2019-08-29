@@ -13,12 +13,10 @@ namespace Announcement\Service;
 
 use Cms\Service\AbstractManager;
 use Cms\Service\WebPageManagerInterface;
-use Cms\Service\HistoryManagerInterface;
 use Announcement\Storage\AnnounceMapperInterface;
 use Announcement\Storage\CategoryMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
-use Krystal\Security\Filter;
 
 final class AnnounceManager extends AbstractManager implements AnnounceManagerInterface
 {
@@ -37,40 +35,16 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     private $webPageManager;
 
     /**
-     * History manager to keep track
-     * 
-     * @var \Cms\Service\HistoryManagerInterface
-     */
-    private $historyManager;
-
-    /**
      * State initialization
      * 
      * @param \Announcement\Storage\AnnounceMapperInterface $announceMapper Any mapper which implements AnnounceMapperInterface
      * @param \Cms\Service\WebPageManagerInterface $webPageManager
-     * @param \Cms\Service\HistoryManagerInterface $historyManager
      * @return void
      */
-    public function __construct(
-        AnnounceMapperInterface $announceMapper, 
-        WebPageManagerInterface $webPageManager,
-        HistoryManagerInterface $historyManager
-    ){
+    public function __construct(AnnounceMapperInterface $announceMapper, WebPageManagerInterface $webPageManager)
+    {
         $this->announceMapper = $announceMapper;
         $this->webPageManager = $webPageManager;
-        $this->historyManager = $historyManager;
-    }
-
-    /**
-     * Tracks activity
-     * 
-     * @param string $message
-     * @param string $placeholder
-     * @return boolean
-     */
-    private function track($message, $placeholder)
-    {
-        return $this->historyManager->write('Announcement', $message, $placeholder);
     }
 
     /**
@@ -146,7 +120,6 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
     private function savePage(array $input)
     {
         $input['announce']['order'] = (int) $input['announce']['order'];
-
         return $this->announceMapper->savePage('Announcement', 'Announcement:Announce@indexAction', $input['announce'], $input['translation']);
     }
 
@@ -169,10 +142,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function add(array $input)
     {
-        $this->savePage($input);
-
-        #$this->track('Announce "%s" has been added', $input['name']);
-        return true;
+        return $this->savePage($input);
     }
 
     /**
@@ -183,10 +153,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function update(array $input)
     {
-        $this->savePage($input);
-
-        #$this->track('Announce "%s" has been updated', $input['name']);
-        return true;
+        return $this->savePage($input);
     }
 
     /**
@@ -227,16 +194,7 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function deleteById($id)
     {
-        // Grab announce's title before we remove it
-        #$title = Filter::escape($this->announceMapper->fetchTitleById($id));
-
-        if ($this->announceMapper->deletePage($id)) {
-            #$this->track('Announce "%s" has been removed', $title);
-            return true;
-
-        } else {
-            return false;
-        }
+        return $this->announceMapper->deletePage($id);
     }
 
     /**
@@ -247,9 +205,6 @@ final class AnnounceManager extends AbstractManager implements AnnounceManagerIn
      */
     public function deleteByIds(array $ids)
     {
-        $this->announceMapper->deletePage($ids);
-
-        $this->track('Batch removal of %s announces', count($ids));
-        return true;
+        return $this->announceMapper->deletePage($ids);
     }
 }
